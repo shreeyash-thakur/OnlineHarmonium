@@ -6,7 +6,6 @@ import { getHarmonium, type HarmoniumPreset } from "@/lib/harmonium-engine";
 type LabelMode = "sargam" | "western" | "none";
 
 export function Harmonium() {
-  const [octaves, setOctaves] = useState<3 | 5>(3);
   const [labels, setLabels] = useState<LabelMode>("sargam");
   const [preset, setPreset] = useState<HarmoniumPreset>("old-delhi");
   const [volume, setVolume] = useState(0.85);
@@ -14,7 +13,7 @@ export function Harmonium() {
   const [held, setHeld] = useState<Set<string>>(new Set());
   const engineReady = useRef(false);
 
-  const keys = useMemo(() => buildKeys(octaves === 5 ? 36 : 48, octaves), [octaves]);
+  const keys = useMemo(() => buildKeys(), []);
   const kbLookup = useMemo(() => {
     const m = new Map<string, Key>();
     keys.forEach(k => { if (k.kb) m.set(k.kb, k); });
@@ -47,11 +46,9 @@ export function Harmonium() {
     });
   };
 
-  // Preset / volume propagation
   useEffect(() => { if (engineReady.current) getHarmonium().applyPreset(preset); }, [preset]);
   useEffect(() => { if (engineReady.current) getHarmonium().setMasterVolume(volume); }, [volume]);
 
-  // Computer keyboard
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
       if (e.repeat || e.metaKey || e.ctrlKey || e.altKey) return;
@@ -70,21 +67,17 @@ export function Harmonium() {
     };
   }, [kbLookup]);
 
-  // Cleanup on unmount
   useEffect(() => () => { try { getHarmonium().allOff(); } catch {} }, []);
 
-  const whiteKeys = keys.filter(k => !k.isBlack);
-  const whiteWidth = 100 / whiteKeys.length;
-
   return (
-    <div className="wood-panel rounded-3xl p-4 sm:p-6 md:p-8 relative overflow-hidden">
+    <div className="wood-panel rounded-3xl p-3 sm:p-5 md:p-6 relative overflow-hidden">
       {/* Top brass strip */}
-      <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
-        <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-xl btn-gold grid place-items-center font-display font-bold">H</div>
-          <div>
-            <div className="text-xs uppercase tracking-widest text-gold-soft">Virtual Harmonium</div>
-            <div className="font-display text-lg font-semibold gold-text">
+      <header className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 sm:flex sm:flex-wrap sm:justify-between mb-4 sm:mb-6">
+        <div className="flex min-w-0 items-center gap-3">
+          <div className="h-10 w-10 shrink-0 rounded-xl btn-gold grid place-items-center font-display font-bold">H</div>
+          <div className="min-w-0">
+            <div className="text-[10px] sm:text-xs uppercase tracking-widest text-gold-soft">Virtual Harmonium</div>
+            <div className="font-display text-base sm:text-lg font-semibold gold-text truncate">
               {preset === "old-delhi" && "Old Delhi"}
               {preset === "scale-changer" && "Scale Changer"}
               {preset === "concert" && "Concert"}
@@ -93,21 +86,16 @@ export function Harmonium() {
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2 text-xs">
+        <div className="col-span-2 flex flex-wrap items-center gap-2 text-xs">
           <Segmented
             value={preset}
             onChange={v => setPreset(v as HarmoniumPreset)}
             options={[
               { v: "old-delhi", l: "Old Delhi" },
-              { v: "scale-changer", l: "Scale Changer" },
+              { v: "scale-changer", l: "Scale" },
               { v: "concert", l: "Concert" },
               { v: "vintage", l: "Vintage" },
             ]}
-          />
-          <Segmented
-            value={String(octaves)}
-            onChange={v => setOctaves(Number(v) as 3 | 5)}
-            options={[{ v: "3", l: "3 oct" }, { v: "5", l: "5 oct" }]}
           />
           <Segmented
             value={labels}
@@ -123,71 +111,48 @@ export function Harmonium() {
             <input
               type="range" min={0} max={1} step={0.01}
               value={volume} onChange={e => setVolume(Number(e.target.value))}
-              className="w-24 accent-[color:var(--gold)]"
+              className="w-20 sm:w-24 accent-[color:var(--gold)]"
             />
           </div>
         </div>
-      </div>
+      </header>
 
-      {/* Bellows */}
       <Bellows pumping={bellowsPumping} />
 
-      {/* Keyboard */}
+      {/* Keyboard — flat single row like web-harmonium.com */}
       <div
-        className="relative mt-6 rounded-2xl p-3"
+        className="relative mt-4 sm:mt-6 rounded-2xl p-2 sm:p-3"
         style={{
           background: "linear-gradient(180deg, oklch(0.16 0.02 40), oklch(0.10 0.015 30))",
           boxShadow: "inset 0 4px 20px oklch(0 0 0 / 0.6), 0 20px 40px -20px oklch(0 0 0 / 0.7)",
         }}
       >
-        <div className="relative w-full overflow-x-auto">
-          <div className="relative h-56 sm:h-64 md:h-72 min-w-[720px]">
-            {/* White keys */}
-            {whiteKeys.map((k, idx) => (
-              <WhiteKey
-                key={k.note}
-                left={idx * whiteWidth}
-                width={whiteWidth}
-                k={k}
-                labels={labels}
-                active={held.has(k.note)}
-                onDown={() => press(k.note)}
-                onUp={() => release(k.note)}
-              />
-            ))}
-            {/* Black keys overlay */}
-            {keys.map((k, i) => {
-              if (!k.isBlack) return null;
-              const whiteBefore = keys.slice(0, i).filter(x => !x.isBlack).length;
-              const left = whiteBefore * whiteWidth - whiteWidth * 0.32;
-              return (
-                <BlackKey
-                  key={k.note}
-                  left={left}
-                  width={whiteWidth * 0.64}
-                  k={k}
-                  labels={labels}
-                  active={held.has(k.note)}
-                  onDown={() => press(k.note)}
-                  onUp={() => release(k.note)}
-                />
-              );
-            })}
-          </div>
+        <div className="flex w-full items-stretch gap-[2px] sm:gap-1">
+          {keys.map(k => (
+            <FlatKey
+              key={k.note}
+              k={k}
+              labels={labels}
+              active={held.has(k.note)}
+              onDown={() => press(k.note)}
+              onUp={() => release(k.note)}
+            />
+          ))}
         </div>
       </div>
 
-      <p className="mt-4 text-xs text-muted-foreground text-center">
-        Play with mouse, touch, or your keyboard — <kbd className="px-1.5 py-0.5 rounded bg-white/10">A S D F G H J K L</kbd> for white keys, <kbd className="px-1.5 py-0.5 rounded bg-white/10">W E T Y U O P</kbd> for black keys.
+      <p className="mt-3 sm:mt-4 text-[10px] sm:text-xs text-muted-foreground text-center px-2">
+        Play with mouse, touch, or your keyboard. Sa is on <kbd className="px-1.5 py-0.5 rounded bg-white/10">E</kbd>.
       </p>
     </div>
   );
 }
 
-function WhiteKey({ left, width, k, labels, active, onDown, onUp }: {
-  left: number; width: number; k: Key; labels: LabelMode; active: boolean;
+function FlatKey({ k, labels, active, onDown, onUp }: {
+  k: Key; labels: LabelMode; active: boolean;
   onDown: () => void; onUp: () => void;
 }) {
+  const isBlack = k.isBlack;
   return (
     <motion.button
       type="button"
@@ -196,92 +161,61 @@ function WhiteKey({ left, width, k, labels, active, onDown, onUp }: {
       onMouseLeave={() => active && onUp()}
       onTouchStart={(e) => { e.preventDefault(); onDown(); }}
       onTouchEnd={(e) => { e.preventDefault(); onUp(); }}
-      style={{ left: `${left}%`, width: `${width}%` }}
-      className="absolute top-0 bottom-0 select-none focus:outline-none"
+      className={`min-w-0 select-none focus:outline-none rounded-md flex flex-col items-center justify-between p-1 sm:p-1.5 ${
+        isBlack ? "flex-[0.55] h-24 sm:h-28 md:h-32" : "flex-1 h-32 sm:h-40 md:h-48"
+      }`}
       animate={{ y: active ? 3 : 0 }}
       transition={{ type: "spring", stiffness: 500, damping: 30 }}
+      style={
+        isBlack
+          ? {
+              background: active
+                ? "linear-gradient(180deg, oklch(0.30 0.05 60), oklch(0.20 0.04 55))"
+                : "linear-gradient(180deg, oklch(0.20 0.02 55), oklch(0.10 0.015 50))",
+              boxShadow: active
+                ? "inset 0 3px 8px oklch(0 0 0 / 0.6), 0 0 20px oklch(0.85 0.15 80 / 0.5)"
+                : "inset 0 -3px 6px oklch(0 0 0 / 0.5), 0 3px 0 oklch(0 0 0 / 0.6)",
+              border: "1px solid oklch(0 0 0 / 0.7)",
+            }
+          : {
+              background: active
+                ? "linear-gradient(180deg, oklch(0.96 0.04 85), oklch(0.85 0.06 82))"
+                : "linear-gradient(180deg, oklch(0.98 0.01 85), oklch(0.90 0.015 80))",
+              boxShadow: active
+                ? "inset 0 4px 8px oklch(0.7 0.1 60 / 0.4), 0 0 24px oklch(0.85 0.15 80 / 0.5)"
+                : "inset 0 -6px 10px oklch(0.6 0.05 60 / 0.3), 0 2px 0 oklch(0 0 0 / 0.4)",
+              border: "1px solid oklch(0.2 0.02 60 / 0.4)",
+            }
+      }
     >
-      <div
-        className="h-full mx-[1px] rounded-b-xl flex flex-col justify-between items-center py-2 relative overflow-hidden"
-        style={{
-          background: active
-            ? "linear-gradient(180deg, oklch(0.96 0.04 85), oklch(0.85 0.06 82))"
-            : "linear-gradient(180deg, oklch(0.98 0.01 85), oklch(0.90 0.015 80))",
-          boxShadow: active
-            ? "inset 0 4px 8px oklch(0.7 0.1 60 / 0.4), 0 0 24px oklch(0.85 0.15 80 / 0.5)"
-            : "inset 0 -6px 10px oklch(0.6 0.05 60 / 0.3), 0 2px 0 oklch(0 0 0 / 0.4)",
-          border: "1px solid oklch(0.2 0.02 60 / 0.4)",
-        }}
-      >
-        {/* Top: keyboard key badge */}
-        {k.kb ? (
-          <div className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-neutral-800 text-neutral-100">
-            {k.kb}
-          </div>
-        ) : <div />}
+      {k.kb ? (
+        <div
+          className={`px-1 py-0.5 rounded text-[8px] sm:text-[9px] font-bold ${
+            isBlack ? "bg-white/85 text-neutral-900" : "bg-neutral-800 text-neutral-100"
+          }`}
+        >
+          {k.kb}
+        </div>
+      ) : <div />}
 
-        {/* Middle: sargam label (amber, bold) */}
-        {labels !== "none" && (
-          <div className="text-sm sm:text-base font-bold text-amber-700 leading-none">
-            {labels === "sargam" ? k.sargam : k.western}
-          </div>
-        )}
+      {labels !== "none" && (
+        <div
+          className={`font-bold leading-none ${
+            isBlack ? "text-[11px] sm:text-sm text-amber-300" : "text-sm sm:text-base text-amber-700"
+          }`}
+        >
+          {labels === "sargam" ? k.sargam : k.western}
+        </div>
+      )}
 
-        {/* Bottom: western note chip (teal) */}
-        {labels === "sargam" ? (
-          <div className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-teal-100 text-teal-700">
-            {k.western}
-          </div>
-        ) : <div />}
-      </div>
+      {!isBlack && labels === "sargam" ? (
+        <div className="px-1 py-0.5 rounded text-[8px] sm:text-[9px] font-bold bg-teal-100 text-teal-700">
+          {k.western}
+        </div>
+      ) : <div />}
     </motion.button>
   );
 }
-
-function BlackKey({ left, width, k, labels, active, onDown, onUp }: {
-  left: number; width: number; k: Key; labels: LabelMode; active: boolean;
-  onDown: () => void; onUp: () => void;
-}) {
-  return (
-    <motion.button
-      type="button"
-      onMouseDown={onDown}
-      onMouseUp={onUp}
-      onMouseLeave={() => active && onUp()}
-      onTouchStart={(e) => { e.preventDefault(); onDown(); }}
-      onTouchEnd={(e) => { e.preventDefault(); onUp(); }}
-      style={{ left: `${left}%`, width: `${width}%` }}
-      className="absolute top-0 h-[62%] z-10 select-none focus:outline-none"
-      animate={{ y: active ? 3 : 0 }}
-      transition={{ type: "spring", stiffness: 500, damping: 30 }}
-    >
-      <div
-        className="h-full rounded-b-lg flex flex-col items-center justify-between py-1.5"
-        style={{
-          background: active
-            ? "linear-gradient(180deg, oklch(0.30 0.05 60), oklch(0.20 0.04 55))"
-            : "linear-gradient(180deg, oklch(0.15 0.02 55), oklch(0.08 0.015 50))",
-          boxShadow: active
-            ? "inset 0 3px 8px oklch(0 0 0 / 0.6), 0 0 20px oklch(0.85 0.15 80 / 0.5)"
-            : "inset 0 -3px 6px oklch(0 0 0 / 0.5), 0 3px 0 oklch(0 0 0 / 0.6)",
-          border: "1px solid oklch(0 0 0 / 0.7)",
-        }}
-      >
-        {k.kb ? (
-          <div className="px-1 py-0.5 rounded text-[8px] font-bold bg-white/90 text-neutral-900">
-            {k.kb}
-          </div>
-        ) : <div />}
-        {labels !== "none" && (
-          <div className="text-[10px] font-bold text-amber-300 leading-none">
-            {labels === "sargam" ? k.sargam : k.western}
-          </div>
-        )}
-      </div>
-    </motion.button>
-  );
-}
-
 
 function Segmented<T extends string>({ value, onChange, options }: {
   value: T; onChange: (v: T) => void; options: { v: T; l: string }[];
@@ -292,7 +226,7 @@ function Segmented<T extends string>({ value, onChange, options }: {
         <button
           key={o.v}
           onClick={() => onChange(o.v)}
-          className={`px-3 py-1.5 rounded-full text-xs transition-all ${
+          className={`px-2 sm:px-3 py-1 sm:py-1.5 rounded-full text-[11px] sm:text-xs transition-all ${
             value === o.v
               ? "btn-gold btn-gold-hover"
               : "text-muted-foreground hover:text-foreground"
@@ -307,8 +241,7 @@ function Segmented<T extends string>({ value, onChange, options }: {
 
 function Bellows({ pumping }: { pumping: boolean }) {
   return (
-    <div className="relative h-16 rounded-2xl glass overflow-hidden">
-      {/* Pleats */}
+    <div className="relative h-10 sm:h-14 rounded-2xl glass overflow-hidden">
       <div className="absolute inset-0 flex">
         {Array.from({ length: 22 }).map((_, i) => (
           <motion.div
@@ -341,7 +274,7 @@ function Bellows({ pumping }: { pumping: boolean }) {
           />
         )}
       </AnimatePresence>
-      <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[10px] uppercase tracking-widest text-gold-soft">
+      <div className="absolute left-3 top-1/2 -translate-y-1/2 text-[9px] sm:text-[10px] uppercase tracking-widest text-gold-soft">
         Bellows
       </div>
     </div>
