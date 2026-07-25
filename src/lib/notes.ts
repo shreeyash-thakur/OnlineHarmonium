@@ -1,70 +1,67 @@
-// Note layout & keyboard mapping for the harmonium.
-// Matches the visual layout of web-harmonium.com: Sa mapped to C, with
-// sargam labels using combining dots for octave (dot below = lower octave,
-// no dot = middle, dot above = upper octave, two dots = higher still).
+// Note layout mirroring web-harmonium.com exactly.
+// Single flat row of 27 keys (F3..G5 chromatic). Black keys are narrower
+// and rendered inline (not overlapping) — matches the reference site's
+// scale-changer layout.
 export type Key = {
-  note: string;        // e.g. "C4"
+  note: string;      // e.g. "C4"
   midi: number;
   isBlack: boolean;
-  sargam: string;      // Indian solfege with octave dots
-  western: string;     // C, C#, D...
-  kb?: string;         // computer keyboard binding
+  sargam: string;    // Indian solfege as shown on reference site
+  western: string;   // C, C#, D...
+  kb?: string;       // computer keyboard binding
 };
 
-// Base sargam letters for Sa=C (middle octave, no dot)
-const sargamBase = [
-  "S", "r", "R", "g", "G", "M", "m", "P", "d", "D", "n", "N",
-];
 const semitoneToWestern = [
-  "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B",
+  "C","C#","D","D#","E","F","F#","G","G#","A","A#","B",
 ];
 
-// Combining diacritics
-const DOT_BELOW = "\u0323";
-const DOT_ABOVE = "\u0307";
+// Exact sequence from web-harmonium.com default view (F3..G5, 27 keys).
+// Each row: [kb, sargam, isBlack]
+const LAYOUT: Array<[string, string, boolean]> = [
+  ["s", "Ṗ", false],
+  ["a", "Ḍ", false],
+  ["`", "Ṇ", false],
+  ["1", "Ṗ", true],
+  ["q", "Ḍ", false],
+  ["2", "Ḍ", true],
+  ["w", "Ṇ", false],
+  ["e", "S", false],
+  ["4", "S", true],
+  ["r", "R", false],
+  ["5", "R", true],
+  ["t", "G", false],
+  ["y", "M", false],
+  ["7", "M", true],
+  ["u", "P", false],
+  ["8", "P", true],
+  ["i", "D", false],
+  ["9", "D", true],
+  ["o", "N", false],
+  ["p", "Ṡ", false],
+  ["-", "Ṡ", true],
+  ["[", "Ṙ", false],
+  ["=", "Ṙ", true],
+  ["]", "Ġ", false],
+  ["\\", "Ṁ", false],
+  ["'", "Ṗ", false],
+  [";", "Ḋ", false],
+];
 
-// Apply octave dots relative to middle octave (C4..B4 => octave 4)
-function sargamWithOctave(pc: number, octave: number): string {
-  const base = sargamBase[pc];
-  const diff = octave - 4;
-  if (diff === 0) return base;
-  if (diff < 0) return base + DOT_BELOW.repeat(Math.min(2, -diff));
-  return base + DOT_ABOVE.repeat(Math.min(2, diff));
-}
-
-// White-key keyboard row (left→right) mirrors web-harmonium.com
-const WHITE_KB = ["s","a","`","w","e","r","t","y","u","i","o","p","]","\\","'",";","/"];
-// Black-key keyboard row
-const BLACK_KB = ["1","2","4","5","7","8","9","-","[","="];
-
-export function buildKeys(_totalMidi = 24, octaves: 3 | 5 = 3): Key[] {
-  // Default range: start at F3 (MIDI 53), like the reference site.
-  const startMidi = 53;
-  const total = octaves === 5 ? 36 : 26; // ~2 octaves visible for 3-mode, wider for 5
-  const keys: Key[] = [];
-  let whiteIdx = 0;
-  let blackIdx = 0;
-  for (let i = 0; i < total; i++) {
+export function buildKeys(): Key[] {
+  const startMidi = 53; // F3
+  return LAYOUT.map(([kb, sargam, isBlack], i) => {
     const midi = startMidi + i;
     const pc = midi % 12;
     const octave = Math.floor(midi / 12) - 1;
-    const isBlack = [1, 3, 6, 8, 10].includes(pc);
-    let kb: string | undefined;
-    if (isBlack) {
-      kb = BLACK_KB[blackIdx++];
-    } else {
-      kb = WHITE_KB[whiteIdx++];
-    }
-    keys.push({
+    return {
       note: `${semitoneToWestern[pc]}${octave}`,
       midi,
       isBlack,
-      sargam: sargamWithOctave(pc, octave),
+      sargam,
       western: semitoneToWestern[pc],
       kb,
-    });
-  }
-  return keys;
+    };
+  });
 }
 
 export function midiToNote(m: number): string {
