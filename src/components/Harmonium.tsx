@@ -202,7 +202,7 @@ function WhiteKey({ left, width, k, labels, active, onDown, onUp }: {
       transition={{ type: "spring", stiffness: 500, damping: 30 }}
     >
       <div
-        className="h-full mx-[1px] rounded-b-xl flex flex-col justify-end items-center pb-3 relative overflow-hidden"
+        className="h-full mx-[1px] rounded-b-xl flex flex-col justify-between items-center py-2 relative overflow-hidden"
         style={{
           background: active
             ? "linear-gradient(180deg, oklch(0.96 0.04 85), oklch(0.85 0.06 82))"
@@ -213,14 +213,26 @@ function WhiteKey({ left, width, k, labels, active, onDown, onUp }: {
           border: "1px solid oklch(0.2 0.02 60 / 0.4)",
         }}
       >
+        {/* Top: keyboard key badge */}
+        {k.kb ? (
+          <div className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-neutral-800 text-neutral-100">
+            {k.kb}
+          </div>
+        ) : <div />}
+
+        {/* Middle: sargam label (amber, bold) */}
         {labels !== "none" && (
-          <div className="text-[10px] sm:text-xs font-medium text-neutral-800">
+          <div className="text-sm sm:text-base font-bold text-amber-700 leading-none">
             {labels === "sargam" ? k.sargam : k.western}
           </div>
         )}
-        {k.kb && (
-          <div className="mt-1 text-[9px] uppercase text-neutral-500">{k.kb}</div>
-        )}
+
+        {/* Bottom: western note chip (teal) */}
+        {labels === "sargam" ? (
+          <div className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-teal-100 text-teal-700">
+            {k.western}
+          </div>
+        ) : <div />}
       </div>
     </motion.button>
   );
@@ -244,7 +256,7 @@ function BlackKey({ left, width, k, labels, active, onDown, onUp }: {
       transition={{ type: "spring", stiffness: 500, damping: 30 }}
     >
       <div
-        className="h-full rounded-b-lg flex flex-col items-center justify-end pb-2"
+        className="h-full rounded-b-lg flex flex-col items-center justify-between py-1.5"
         style={{
           background: active
             ? "linear-gradient(180deg, oklch(0.30 0.05 60), oklch(0.20 0.04 55))"
@@ -255,8 +267,13 @@ function BlackKey({ left, width, k, labels, active, onDown, onUp }: {
           border: "1px solid oklch(0 0 0 / 0.7)",
         }}
       >
+        {k.kb ? (
+          <div className="px-1 py-0.5 rounded text-[8px] font-bold bg-white/90 text-neutral-900">
+            {k.kb}
+          </div>
+        ) : <div />}
         {labels !== "none" && (
-          <div className="text-[9px] font-medium text-gold-soft">
+          <div className="text-[10px] font-bold text-amber-300 leading-none">
             {labels === "sargam" ? k.sargam : k.western}
           </div>
         )}
@@ -264,6 +281,7 @@ function BlackKey({ left, width, k, labels, active, onDown, onUp }: {
     </motion.button>
   );
 }
+
 
 function Segmented<T extends string>({ value, onChange, options }: {
   value: T; onChange: (v: T) => void; options: { v: T; l: string }[];
