@@ -12,10 +12,10 @@ const SAMPLE_BASE_MIDI = 62;
 const presetConfig: Record<HarmoniumPreset, {
   filter: number; reverb: number; brightness: number;
 }> = {
-  "old-delhi":     { filter: 4200, reverb: 0.28, brightness: 0.95 },
-  "scale-changer": { filter: 5200, reverb: 0.20, brightness: 1.00 },
-  "concert":       { filter: 6500, reverb: 0.42, brightness: 1.10 },
-  "vintage":       { filter: 3200, reverb: 0.50, brightness: 0.85 },
+  "old-delhi":     { filter: 4200, reverb: 0.05, brightness: 0.95 },
+  "scale-changer": { filter: 5200, reverb: 0.03, brightness: 1.00 },
+  "concert":       { filter: 6500, reverb: 0.10, brightness: 1.10 },
+  "vintage":       { filter: 3200, reverb: 0.12, brightness: 0.85 },
 };
 
 function noteToMidi(note: string): number {
@@ -158,7 +158,7 @@ class HarmoniumEngine {
     if (!voice) return;
     this.active.delete(note);
     const t = this.ctx.currentTime;
-    const releaseTime = 0.28;
+    const releaseTime = 0.05;
     voice.gain.gain.cancelScheduledValues(t);
     voice.gain.gain.setValueAtTime(voice.gain.gain.value, t);
     voice.gain.gain.linearRampToValueAtTime(0, t + releaseTime);
