@@ -158,7 +158,7 @@ class HarmoniumEngine {
     if (!voice) return;
     this.active.delete(note);
     const t = this.ctx.currentTime;
-    const releaseTime = 0.28;
+    const releaseTime = 0.05;
     voice.gain.gain.cancelScheduledValues(t);
     voice.gain.gain.setValueAtTime(voice.gain.gain.value, t);
     voice.gain.gain.linearRampToValueAtTime(0, t + releaseTime);
