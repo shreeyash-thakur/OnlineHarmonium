@@ -29,22 +29,24 @@ export function Harmonium() {
     }
   }
 
-  const press = async (note: string) => {
+  const press = useCallback(async (note: string) => {
     await ensureEngine();
     getHarmonium().noteOn(note, 0.9);
     setBellowsPumping(true);
     setHeld(prev => {
+      if (prev.has(note)) return prev;
       const n = new Set(prev); n.add(note); return n;
     });
-  };
-  const release = (note: string) => {
+  }, []);
+  const release = useCallback((note: string) => {
     getHarmonium().noteOff(note);
     setHeld(prev => {
+      if (!prev.has(note)) return prev;
       const n = new Set(prev); n.delete(note);
       if (n.size === 0) setBellowsPumping(false);
       return n;
     });
-  };
+  }, []);
 
   useEffect(() => { if (engineReady.current) getHarmonium().applyPreset(preset); }, [preset]);
   useEffect(() => { if (engineReady.current) getHarmonium().setMasterVolume(volume); }, [volume]);
