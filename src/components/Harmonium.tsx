@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { buildKeys, type Key } from "@/lib/notes";
 import { getHarmonium, type HarmoniumPreset } from "@/lib/harmonium-engine";
