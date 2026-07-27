@@ -20,18 +20,33 @@ export function Harmonium() {
     return m;
   }, [keys]);
 
+  useEffect(() => {
+    void getHarmonium().preload();
+  }, []);
+
+  async function startEngineOnce() {
+    if (engineReady.current) return;
+
+    const engine = getHarmonium();
+    await engine.ensureStarted();
+    engine.applyPreset(preset);
+    engine.setMasterVolume(volume);
+    engineReady.current = true;
+  }
+
   async function ensureEngine() {
     if (!engineReady.current) {
-      await getHarmonium().ensureStarted();
-      getHarmonium().applyPreset(preset);
-      getHarmonium().setMasterVolume(volume);
-      engineReady.current = true;
+      await startEngineOnce();
     }
   }
 
   const press = useCallback(async (note: string) => {
-    await ensureEngine();
-    getHarmonium().noteOn(note, 0.9);
+    if (!engineReady.current) {
+      await startEngineOnce();
+    }
+
+    const engine = getHarmonium();
+    engine.noteOn(note, 0.9);
     setBellowsPumping(true);
     setHeld(prev => {
       if (prev.has(note)) return prev;
