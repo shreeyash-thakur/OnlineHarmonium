@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { buildKeys, type Key } from "@/lib/notes";
 import { getHarmonium, type HarmoniumPreset } from "@/lib/harmonium-engine";
@@ -29,22 +29,24 @@ export function Harmonium() {
     }
   }
 
-  const press = async (note: string) => {
+  const press = useCallback(async (note: string) => {
     await ensureEngine();
     getHarmonium().noteOn(note, 0.9);
     setBellowsPumping(true);
     setHeld(prev => {
+      if (prev.has(note)) return prev;
       const n = new Set(prev); n.add(note); return n;
     });
-  };
-  const release = (note: string) => {
+  }, []);
+  const release = useCallback((note: string) => {
     getHarmonium().noteOff(note);
     setHeld(prev => {
+      if (!prev.has(note)) return prev;
       const n = new Set(prev); n.delete(note);
       if (n.size === 0) setBellowsPumping(false);
       return n;
     });
-  };
+  }, []);
 
   useEffect(() => { if (engineReady.current) getHarmonium().applyPreset(preset); }, [preset]);
   useEffect(() => { if (engineReady.current) getHarmonium().setMasterVolume(volume); }, [volume]);
@@ -129,7 +131,7 @@ export function Harmonium() {
   );
 }
 
-function Keyboard({ keys, labels, held, onDown, onUp }: {
+const Keyboard = memo(function Keyboard({ keys, labels, held, onDown, onUp }: {
   keys: Key[]; labels: LabelMode; held: Set<string>;
   onDown: (n: string) => void; onUp: (n: string) => void;
 }) {
@@ -158,11 +160,14 @@ function Keyboard({ keys, labels, held, onDown, onUp }: {
           {whites.map(k => (
             <WhiteKey
               key={k.note}
-              k={k}
+              note={k.note}
+              kb={k.kb}
+              sargam={k.sargam}
+              western={k.western}
               labels={labels}
               active={held.has(k.note)}
-              onDown={() => onDown(k.note)}
-              onUp={() => onUp(k.note)}
+              onDown={onDown}
+              onUp={onUp}
             />
           ))}
         </div>
@@ -170,37 +175,52 @@ function Keyboard({ keys, labels, held, onDown, onUp }: {
           {blacks.map(({ k, whitesBefore }) => (
             <BlackKey
               key={k.note}
-              k={k}
+              note={k.note}
+              kb={k.kb}
+              sargam={k.sargam}
+              western={k.western}
               labels={labels}
               active={held.has(k.note)}
               leftPct={(whitesBefore / W) * 100 - blackWidthPct / 2}
               widthPct={blackWidthPct}
-              onDown={() => onDown(k.note)}
-              onUp={() => onUp(k.note)}
+              onDown={onDown}
+              onUp={onUp}
             />
           ))}
         </div>
       </div>
     </div>
   );
-}
+});
 
-function WhiteKey({ k, labels, active, onDown, onUp }: {
-  k: Key; labels: LabelMode; active: boolean;
-  onDown: () => void; onUp: () => void;
-}) {
+type WhiteKeyProps = {
+  note: string; kb?: string; sargam: string; western: string;
+  labels: LabelMode; active: boolean;
+  onDown: (n: string) => void; onUp: (n: string) => void;
+};
+
+const WhiteKey = memo(function WhiteKey({ note, kb, sargam, western, labels, active, onDown, onUp }: WhiteKeyProps) {
+  const down = useCallback((e: React.PointerEvent) => {
+    e.preventDefault();
+    (e.currentTarget as HTMLButtonElement).setPointerCapture?.(e.pointerId);
+    onDown(note);
+  }, [note, onDown]);
+  const up = useCallback((e: React.PointerEvent) => {
+    e.preventDefault();
+    onUp(note);
+  }, [note, onUp]);
+
   return (
-    <motion.button
+    <button
       type="button"
-      onMouseDown={onDown}
-      onMouseUp={onUp}
-      onMouseLeave={() => active && onUp()}
-      onTouchStart={(e) => { e.preventDefault(); onDown(); }}
-      onTouchEnd={(e) => { e.preventDefault(); onUp(); }}
-      className="min-w-0 flex-1 select-none focus:outline-none flex flex-col items-center justify-between py-1.5 border-r border-black/40"
-      animate={{ y: active ? 3 : 0 }}
-      transition={{ type: "spring", stiffness: 500, damping: 30 }}
+      onPointerDown={down}
+      onPointerUp={up}
+      onPointerCancel={up}
+      onContextMenu={(e) => e.preventDefault()}
+      className="min-w-0 flex-1 select-none focus:outline-none flex flex-col items-center justify-between py-1.5 border-r border-black/40 touch-none will-change-transform"
       style={{
+        transform: active ? "translateY(3px)" : "translateY(0)",
+        transition: "transform 60ms ease-out",
         background: active
           ? "linear-gradient(180deg, oklch(0.96 0.04 85), oklch(0.85 0.06 82))"
           : "linear-gradient(180deg, oklch(0.98 0.01 85), oklch(0.90 0.015 80))",
@@ -209,45 +229,54 @@ function WhiteKey({ k, labels, active, onDown, onUp }: {
           : "inset 0 -6px 10px oklch(0.6 0.05 60 / 0.3)",
       }}
     >
-      {k.kb ? (
+      {kb ? (
         <div className="px-1 py-0.5 rounded text-[8px] sm:text-[9px] font-bold bg-neutral-800 text-neutral-100">
-          {k.kb}
+          {kb}
         </div>
       ) : <div />}
 
       {labels !== "none" ? (
         <div className="font-bold leading-none text-sm sm:text-base text-amber-700">
-          {labels === "sargam" ? k.sargam : k.western}
+          {labels === "sargam" ? sargam : western}
         </div>
       ) : <div />}
 
       {labels === "sargam" ? (
         <div className="px-1 py-0.5 rounded text-[8px] sm:text-[9px] font-bold bg-teal-100 text-teal-700">
-          {k.western}
+          {western}
         </div>
       ) : <div />}
-    </motion.button>
+    </button>
   );
-}
+});
 
-function BlackKey({ k, labels, active, leftPct, widthPct, onDown, onUp }: {
-  k: Key; labels: LabelMode; active: boolean;
-  leftPct: number; widthPct: number;
-  onDown: () => void; onUp: () => void;
-}) {
+type BlackKeyProps = WhiteKeyProps & { leftPct: number; widthPct: number };
+
+const BlackKey = memo(function BlackKey({ note, kb, sargam, western, labels, active, leftPct, widthPct, onDown, onUp }: BlackKeyProps) {
+  const down = useCallback((e: React.PointerEvent) => {
+    e.preventDefault();
+    (e.currentTarget as HTMLButtonElement).setPointerCapture?.(e.pointerId);
+    onDown(note);
+  }, [note, onDown]);
+  const up = useCallback((e: React.PointerEvent) => {
+    e.preventDefault();
+    onUp(note);
+  }, [note, onUp]);
+
   return (
-    <motion.button
+    <button
       type="button"
-      onMouseDown={onDown}
-      onMouseUp={onUp}
-      onMouseLeave={() => active && onUp()}
-      onTouchStart={(e) => { e.preventDefault(); onDown(); }}
-      onTouchEnd={(e) => { e.preventDefault(); onUp(); }}
-      className="absolute top-0 rounded-b-md pointer-events-auto select-none focus:outline-none flex flex-col items-center justify-between py-1"
+      onPointerDown={down}
+      onPointerUp={up}
+      onPointerCancel={up}
+      onContextMenu={(e) => e.preventDefault()}
+      className="absolute top-0 rounded-b-md pointer-events-auto select-none focus:outline-none flex flex-col items-center justify-between py-1 touch-none will-change-transform"
       style={{
         left: `${leftPct}%`,
         width: `${widthPct}%`,
         height: "62%",
+        transform: active ? "translateY(2px)" : "translateY(0)",
+        transition: "transform 60ms ease-out",
         background: active
           ? "linear-gradient(180deg, oklch(0.30 0.05 60), oklch(0.20 0.04 55))"
           : "linear-gradient(180deg, oklch(0.14 0.02 55), oklch(0.06 0.015 50))",
@@ -256,22 +285,20 @@ function BlackKey({ k, labels, active, leftPct, widthPct, onDown, onUp }: {
           : "inset 0 -3px 6px oklch(0 0 0 / 0.5), 0 3px 0 oklch(0 0 0 / 0.6)",
         border: "1px solid oklch(0 0 0 / 0.7)",
       }}
-      animate={{ y: active ? 2 : 0 }}
-      transition={{ type: "spring", stiffness: 500, damping: 30 }}
     >
-      {k.kb ? (
+      {kb ? (
         <div className="px-1 py-0.5 rounded text-[8px] sm:text-[9px] font-bold bg-white/85 text-neutral-900">
-          {k.kb}
+          {kb}
         </div>
       ) : <div />}
       {labels !== "none" ? (
         <div className="font-bold leading-none text-[10px] sm:text-xs text-amber-300">
-          {labels === "sargam" ? k.sargam : k.western}
+          {labels === "sargam" ? sargam : western}
         </div>
       ) : <div />}
-    </motion.button>
+    </button>
   );
-}
+});
 
 function Segmented<T extends string>({ value, onChange, options }: {
   value: T; onChange: (v: T) => void; options: { v: T; l: string }[];
