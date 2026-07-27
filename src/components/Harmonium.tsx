@@ -119,27 +119,8 @@ export function Harmonium() {
 
       <Bellows pumping={bellowsPumping} />
 
-      {/* Keyboard — flat single row like web-harmonium.com */}
-      <div
-        className="relative mt-4 sm:mt-6 rounded-2xl p-2 sm:p-3"
-        style={{
-          background: "linear-gradient(180deg, oklch(0.16 0.02 40), oklch(0.10 0.015 30))",
-          boxShadow: "inset 0 4px 20px oklch(0 0 0 / 0.6), 0 20px 40px -20px oklch(0 0 0 / 0.7)",
-        }}
-      >
-        <div className="flex w-full items-stretch gap-[2px] sm:gap-1">
-          {keys.map(k => (
-            <FlatKey
-              key={k.note}
-              k={k}
-              labels={labels}
-              active={held.has(k.note)}
-              onDown={() => press(k.note)}
-              onUp={() => release(k.note)}
-            />
-          ))}
-        </div>
-      </div>
+      {/* Keyboard — hero visual: whites as flex row, blacks overlaid on top */}
+      <Keyboard keys={keys} labels={labels} held={held} onDown={press} onUp={release} />
 
       <p className="mt-3 sm:mt-4 text-[10px] sm:text-xs text-muted-foreground text-center px-2">
         Play with mouse, touch, or your keyboard. Sa is on <kbd className="px-1.5 py-0.5 rounded bg-white/10">E</kbd>.
@@ -148,11 +129,66 @@ export function Harmonium() {
   );
 }
 
-function FlatKey({ k, labels, active, onDown, onUp }: {
+function Keyboard({ keys, labels, held, onDown, onUp }: {
+  keys: Key[]; labels: LabelMode; held: Set<string>;
+  onDown: (n: string) => void; onUp: (n: string) => void;
+}) {
+  const whites = keys.filter(k => !k.isBlack);
+  const W = whites.length;
+  const blacks = keys
+    .map((k, i) => ({ k, i }))
+    .filter(x => x.k.isBlack)
+    .map(({ k, i }) => ({
+      k,
+      whitesBefore: keys.slice(0, i).filter(x => !x.isBlack).length,
+    }));
+
+  const blackWidthPct = (100 / W) * 0.62;
+
+  return (
+    <div
+      className="relative mt-4 sm:mt-6 rounded-2xl p-2 sm:p-3"
+      style={{
+        background: "linear-gradient(180deg, oklch(0.16 0.02 40), oklch(0.10 0.015 30))",
+        boxShadow: "inset 0 4px 20px oklch(0 0 0 / 0.6), 0 20px 40px -20px oklch(0 0 0 / 0.7)",
+      }}
+    >
+      <div className="relative h-40 sm:h-52 md:h-60 rounded-xl overflow-hidden">
+        <div className="absolute inset-0 flex">
+          {whites.map(k => (
+            <WhiteKey
+              key={k.note}
+              k={k}
+              labels={labels}
+              active={held.has(k.note)}
+              onDown={() => onDown(k.note)}
+              onUp={() => onUp(k.note)}
+            />
+          ))}
+        </div>
+        <div className="absolute inset-0 pointer-events-none">
+          {blacks.map(({ k, whitesBefore }) => (
+            <BlackKey
+              key={k.note}
+              k={k}
+              labels={labels}
+              active={held.has(k.note)}
+              leftPct={(whitesBefore / W) * 100 - blackWidthPct / 2}
+              widthPct={blackWidthPct}
+              onDown={() => onDown(k.note)}
+              onUp={() => onUp(k.note)}
+            />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function WhiteKey({ k, labels, active, onDown, onUp }: {
   k: Key; labels: LabelMode; active: boolean;
   onDown: () => void; onUp: () => void;
 }) {
-  const isBlack = k.isBlack;
   return (
     <motion.button
       type="button"
@@ -161,56 +197,76 @@ function FlatKey({ k, labels, active, onDown, onUp }: {
       onMouseLeave={() => active && onUp()}
       onTouchStart={(e) => { e.preventDefault(); onDown(); }}
       onTouchEnd={(e) => { e.preventDefault(); onUp(); }}
-      className={`min-w-0 select-none focus:outline-none rounded-md flex flex-col items-center justify-between p-1 sm:p-1.5 ${
-        isBlack ? "flex-[0.55] h-24 sm:h-28 md:h-32" : "flex-1 h-32 sm:h-40 md:h-48"
-      }`}
+      className="min-w-0 flex-1 select-none focus:outline-none flex flex-col items-center justify-between py-1.5 border-r border-black/40"
       animate={{ y: active ? 3 : 0 }}
       transition={{ type: "spring", stiffness: 500, damping: 30 }}
-      style={
-        isBlack
-          ? {
-              background: active
-                ? "linear-gradient(180deg, oklch(0.30 0.05 60), oklch(0.20 0.04 55))"
-                : "linear-gradient(180deg, oklch(0.20 0.02 55), oklch(0.10 0.015 50))",
-              boxShadow: active
-                ? "inset 0 3px 8px oklch(0 0 0 / 0.6), 0 0 20px oklch(0.85 0.15 80 / 0.5)"
-                : "inset 0 -3px 6px oklch(0 0 0 / 0.5), 0 3px 0 oklch(0 0 0 / 0.6)",
-              border: "1px solid oklch(0 0 0 / 0.7)",
-            }
-          : {
-              background: active
-                ? "linear-gradient(180deg, oklch(0.96 0.04 85), oklch(0.85 0.06 82))"
-                : "linear-gradient(180deg, oklch(0.98 0.01 85), oklch(0.90 0.015 80))",
-              boxShadow: active
-                ? "inset 0 4px 8px oklch(0.7 0.1 60 / 0.4), 0 0 24px oklch(0.85 0.15 80 / 0.5)"
-                : "inset 0 -6px 10px oklch(0.6 0.05 60 / 0.3), 0 2px 0 oklch(0 0 0 / 0.4)",
-              border: "1px solid oklch(0.2 0.02 60 / 0.4)",
-            }
-      }
+      style={{
+        background: active
+          ? "linear-gradient(180deg, oklch(0.96 0.04 85), oklch(0.85 0.06 82))"
+          : "linear-gradient(180deg, oklch(0.98 0.01 85), oklch(0.90 0.015 80))",
+        boxShadow: active
+          ? "inset 0 4px 8px oklch(0.7 0.1 60 / 0.4), 0 0 24px oklch(0.85 0.15 80 / 0.5)"
+          : "inset 0 -6px 10px oklch(0.6 0.05 60 / 0.3)",
+      }}
     >
       {k.kb ? (
-        <div
-          className={`px-1 py-0.5 rounded text-[8px] sm:text-[9px] font-bold ${
-            isBlack ? "bg-white/85 text-neutral-900" : "bg-neutral-800 text-neutral-100"
-          }`}
-        >
+        <div className="px-1 py-0.5 rounded text-[8px] sm:text-[9px] font-bold bg-neutral-800 text-neutral-100">
           {k.kb}
         </div>
       ) : <div />}
 
-      {labels !== "none" && (
-        <div
-          className={`font-bold leading-none ${
-            isBlack ? "text-[11px] sm:text-sm text-amber-300" : "text-sm sm:text-base text-amber-700"
-          }`}
-        >
+      {labels !== "none" ? (
+        <div className="font-bold leading-none text-sm sm:text-base text-amber-700">
           {labels === "sargam" ? k.sargam : k.western}
         </div>
-      )}
+      ) : <div />}
 
-      {!isBlack && labels === "sargam" ? (
+      {labels === "sargam" ? (
         <div className="px-1 py-0.5 rounded text-[8px] sm:text-[9px] font-bold bg-teal-100 text-teal-700">
           {k.western}
+        </div>
+      ) : <div />}
+    </motion.button>
+  );
+}
+
+function BlackKey({ k, labels, active, leftPct, widthPct, onDown, onUp }: {
+  k: Key; labels: LabelMode; active: boolean;
+  leftPct: number; widthPct: number;
+  onDown: () => void; onUp: () => void;
+}) {
+  return (
+    <motion.button
+      type="button"
+      onMouseDown={onDown}
+      onMouseUp={onUp}
+      onMouseLeave={() => active && onUp()}
+      onTouchStart={(e) => { e.preventDefault(); onDown(); }}
+      onTouchEnd={(e) => { e.preventDefault(); onUp(); }}
+      className="absolute top-0 rounded-b-md pointer-events-auto select-none focus:outline-none flex flex-col items-center justify-between py-1"
+      style={{
+        left: `${leftPct}%`,
+        width: `${widthPct}%`,
+        height: "62%",
+        background: active
+          ? "linear-gradient(180deg, oklch(0.30 0.05 60), oklch(0.20 0.04 55))"
+          : "linear-gradient(180deg, oklch(0.14 0.02 55), oklch(0.06 0.015 50))",
+        boxShadow: active
+          ? "inset 0 3px 8px oklch(0 0 0 / 0.6), 0 0 20px oklch(0.85 0.15 80 / 0.5)"
+          : "inset 0 -3px 6px oklch(0 0 0 / 0.5), 0 3px 0 oklch(0 0 0 / 0.6)",
+        border: "1px solid oklch(0 0 0 / 0.7)",
+      }}
+      animate={{ y: active ? 2 : 0 }}
+      transition={{ type: "spring", stiffness: 500, damping: 30 }}
+    >
+      {k.kb ? (
+        <div className="px-1 py-0.5 rounded text-[8px] sm:text-[9px] font-bold bg-white/85 text-neutral-900">
+          {k.kb}
+        </div>
+      ) : <div />}
+      {labels !== "none" ? (
+        <div className="font-bold leading-none text-[10px] sm:text-xs text-amber-300">
+          {labels === "sargam" ? k.sargam : k.western}
         </div>
       ) : <div />}
     </motion.button>
