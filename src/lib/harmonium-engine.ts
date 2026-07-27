@@ -120,7 +120,12 @@ class HarmoniumEngine {
 
   noteOn(note: string, velocity = 0.9) {
     if (!this.started || !this.ctx || !this.buffer) return;
-    if (this.active.has(note)) return;
+    // Fast retrigger: if already sounding, kill previous instantly.
+    const existing = this.active.get(note);
+    if (existing) {
+      try { existing.src.stop(); existing.src.disconnect(); existing.gain.disconnect(); } catch {}
+      this.active.delete(note);
+    }
 
     const src = this.ctx.createBufferSource();
     src.buffer = this.buffer;
@@ -133,9 +138,9 @@ class HarmoniumEngine {
     const gain = this.ctx.createGain();
     const v = Math.max(0.2, Math.min(1, velocity));
     const t = this.ctx.currentTime;
-    // Reed-like attack: quick swell
+    // Very short attack so rapid presses feel instant
     gain.gain.setValueAtTime(0, t);
-    gain.gain.linearRampToValueAtTime(v * 0.85, t + 0.04);
+    gain.gain.linearRampToValueAtTime(v * 0.85, t + 0.006);
 
     src.connect(gain).connect(this.filter);
     src.start(0);
