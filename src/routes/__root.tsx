@@ -101,6 +101,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           description: "Free online virtual harmonium with tanpura, shruti box and metronome.",
         }),
       },
+      {
+        src: "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5691989206254780",
+        async: true,
+        crossOrigin: "anonymous",
+      },
     ],
   }),
   shellComponent: RootShell,
