@@ -7,13 +7,31 @@ import { ArrowLeft } from "lucide-react";
 export const Route = createFileRoute("/play")({
   head: () => ({
     meta: [
-      { title: "Play — Virtual Harmonium · Riyaz" },
-      { name: "description", content: "Play a realistic online harmonium with tanpura drone and metronome. Sargam and western note labels, three or five octaves, and computer keyboard support." },
-      { property: "og:title", content: "Play the Virtual Harmonium" },
+      { title: "Play Virtual Harmonium Online — Free with Tanpura & Metronome | Riyaz" },
+      { name: "description", content: "Play a realistic online harmonium free in your browser. 27-key scale-changer layout, sargam and western labels, tanpura drone, metronome, and computer keyboard support." },
+      { name: "keywords", content: "play harmonium online, virtual harmonium, online harmonium keyboard, tanpura online, harmonium sargam" },
+      { name: "robots", content: "index, follow, max-image-preview:large" },
+      { property: "og:title", content: "Play the Virtual Harmonium — Free Online" },
       { property: "og:description", content: "Realistic sampled harmonium with tanpura and metronome. Play in the browser, free." },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "/play" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Play Virtual Harmonium Online" },
+      { name: "twitter:description", content: "Realistic sampled harmonium with tanpura and metronome. Play free in your browser." },
+    ],
+    links: [{ rel: "canonical", href: "/play" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            { "@type": "ListItem", position: 1, name: "Home", item: "/" },
+            { "@type": "ListItem", position: 2, name: "Play", item: "/play" },
+          ],
+        }),
+      },
     ],
   }),
   component: PlayPage,
@@ -33,6 +51,7 @@ function PlayPage() {
       </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 pb-16">
+        <h1 className="sr-only">Play the Virtual Harmonium Online — Free with Tanpura and Metronome</h1>
         <div className="grid lg:grid-cols-[1fr_320px] gap-6">
           <Harmonium />
           <aside className="flex flex-col gap-4">
