@@ -1,29 +1,38 @@
-# Welcome to your Lovable project
+# Riyaz — Virtual Harmonium Online
 
-This project was built with [Lovable](https://lovable.dev).
-
-## Build with Lovable
-
-Open your project in the [Lovable editor](https://lovable.dev) and keep building.
-
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: connect the project to GitHub and every change made in Lovable is committed straight to your repository.
-- **Full ownership**: this code is yours. Push to your repository and your changes sync back into Lovable, ready for your next prompt.
-
-## Development
-
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
-
-```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
-npm run dev
-```
+A premium virtual harmonium in the browser, with realistic sound, tanpura, and metronome — built for practice and riyaz anywhere.
 
 ## Built with
 
-- TanStack Start
+- [TanStack Start](https://tanstack.com/start)
 - TypeScript
 - React
 - Tailwind CSS
+- [Tone.js](https://tonejs.github.io/) for audio synthesis
+
+## Development
+
+You'll need Node.js (or Bun) installed.
+
+```sh
+git clone https://github.com/shreeyash-thakur/harmonic-soul.git
+cd harmonic-soul
+npm install
+npm run dev
+```
+
+The dev server runs at `http://localhost:8080`.
+
+### Other scripts
+
+```sh
+npm run build       # production build
+npm run build:dev   # development-mode build
+npm run preview     # preview a production build locally
+npm run lint         # lint the codebase
+npm run format       # format with prettier
+```
+
+## Deployment
+
+The production build targets Cloudflare Workers via [Nitro](https://nitro.build/)'s `cloudflare-module` preset, configured in `vite.config.ts`. Any other Nitro-supported target can be used instead by adjusting the preset there.
