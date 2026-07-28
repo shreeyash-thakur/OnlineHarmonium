@@ -1,8 +1,11 @@
 // Sample-based harmonium engine using Web Audio API.
 // Uses the original "kannan" harmonium sustain sample + convolution reverb IR
 // from the Web Harmonium project by Rajaraman Iyer, for authentic reed sound.
-import sampleAsset from "@/assets/harmonium-kannan-orig.wav.asset.json";
-import reverbAsset from "@/assets/reverb.wav.asset.json";
+//
+// The .wav files live in /public/audio and are fetched by root-relative path
+// at runtime (see README for how to obtain them).
+const SAMPLE_URL = "/audio/harmonium-kannan-orig.wav";
+const REVERB_URL = "/audio/reverb.wav";
 
 export type HarmoniumPreset = "old-delhi" | "scale-changer" | "concert" | "vintage";
 
@@ -102,8 +105,18 @@ class HarmoniumEngine {
 
     // Fetch sample + IR in parallel
     const [sampleBuf, irBuf] = await Promise.all([
-      fetch(sampleAsset.url).then(r => r.arrayBuffer()).then(b => ctx.decodeAudioData(b)),
-      fetch(reverbAsset.url).then(r => r.arrayBuffer()).then(b => ctx.decodeAudioData(b)),
+      fetch(SAMPLE_URL)
+        .then(r => {
+          if (!r.ok) throw new Error(`Missing ${SAMPLE_URL} (${r.status}) — see README for setup`);
+          return r.arrayBuffer();
+        })
+        .then(b => ctx.decodeAudioData(b)),
+      fetch(REVERB_URL)
+        .then(r => {
+          if (!r.ok) throw new Error(`Missing ${REVERB_URL} (${r.status}) — see README for setup`);
+          return r.arrayBuffer();
+        })
+        .then(b => ctx.decodeAudioData(b)),
     ]);
     this.buffer = sampleBuf;
     this.reverbBuffer = irBuf;

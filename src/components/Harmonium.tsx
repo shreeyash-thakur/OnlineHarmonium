@@ -11,6 +11,7 @@ export function Harmonium() {
   const [volume, setVolume] = useState(0.85);
   const [bellowsPumping, setBellowsPumping] = useState(false);
   const [held, setHeld] = useState<Set<string>>(new Set());
+  const [loadError, setLoadError] = useState<string | null>(null);
   const engineReady = useRef(false);
 
   const keys = useMemo(() => buildKeys(), []);
@@ -21,17 +22,25 @@ export function Harmonium() {
   }, [keys]);
 
   useEffect(() => {
-    void getHarmonium().preload();
+    getHarmonium()
+      .preload()
+      ?.catch(err => setLoadError(err instanceof Error ? err.message : String(err)));
   }, []);
 
   async function startEngineOnce() {
     if (engineReady.current) return;
 
     const engine = getHarmonium();
-    await engine.ensureStarted();
+    try {
+      await engine.ensureStarted();
+    } catch (err) {
+      setLoadError(err instanceof Error ? err.message : String(err));
+      return;
+    }
     engine.applyPreset(preset);
     engine.setMasterVolume(volume);
     engineReady.current = true;
+    setLoadError(null);
   }
 
   async function ensureEngine() {
@@ -88,6 +97,11 @@ export function Harmonium() {
 
   return (
     <div className="wood-panel rounded-3xl p-3 sm:p-5 md:p-6 relative overflow-hidden">
+      {loadError && (
+        <div className="mb-3 rounded-lg border border-red-500/40 bg-red-950/40 px-3 py-2 text-xs text-red-200">
+          Couldn't load the harmonium sound: {loadError}
+        </div>
+      )}
       {/* Top brass strip */}
       <header className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 sm:flex sm:flex-wrap sm:justify-between mb-4 sm:mb-6">
         <div className="flex min-w-0 items-center gap-3">
