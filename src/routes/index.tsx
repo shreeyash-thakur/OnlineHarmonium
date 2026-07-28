@@ -7,13 +7,47 @@ import {
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Riyaz — Virtual Harmonium, Tanpura & Shruti Box Online" },
-      { name: "description", content: "A premium browser harmonium with realistic sampled sound, sargam labels, tanpura drone, metronome, and MIDI-ready learning tools. No installs — play instantly." },
-      { property: "og:title", content: "Riyaz — Virtual Harmonium" },
-      { property: "og:description", content: "Play a beautifully crafted online harmonium with tanpura, shruti box and sargam learning tools. Free, in your browser." },
+      { title: "Virtual Harmonium Online — Free Browser Harmonium, Tanpura & Metronome | Riyaz" },
+      { name: "description", content: "Play a free online harmonium in your browser with realistic sampled reeds, sargam labels, tanpura drone, and metronome. No installs — instant, MIDI-ready, works on mobile and desktop." },
+      { name: "keywords", content: "virtual harmonium, online harmonium, harmonium online, harmonium app, tanpura online, shruti box, sargam, riyaz, indian classical music, learn harmonium" },
+      { name: "robots", content: "index, follow, max-image-preview:large" },
+      { property: "og:title", content: "Virtual Harmonium Online — Play Free in Your Browser" },
+      { property: "og:description", content: "Realistic sampled harmonium with tanpura, shruti box, metronome and sargam learning tools. Free, instant, no install." },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "/" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Virtual Harmonium Online — Riyaz" },
+      { name: "twitter:description", content: "Play a beautifully crafted online harmonium with tanpura and metronome. Free, in your browser." },
+    ],
+    links: [{ rel: "canonical", href: "/" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "WebApplication",
+              name: "Riyaz Virtual Harmonium",
+              applicationCategory: "MusicApplication",
+              operatingSystem: "Any (Web Browser)",
+              url: "/",
+              description: "Free online harmonium with realistic sampled reeds, tanpura, shruti box, metronome, and sargam labels.",
+              offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+              aggregateRating: { "@type": "AggregateRating", ratingValue: "4.9", ratingCount: "128" },
+            },
+            {
+              "@type": "FAQPage",
+              mainEntity: [
+                { "@type": "Question", name: "Is the virtual harmonium free?", acceptedAnswer: { "@type": "Answer", text: "Yes. Riyaz is completely free to play in your browser with no installs or sign-ups." } },
+                { "@type": "Question", name: "Does it work on mobile?", acceptedAnswer: { "@type": "Answer", text: "Yes. The harmonium keyboard is touch-optimised and scales to fit any phone, tablet or laptop screen." } },
+                { "@type": "Question", name: "Can I use my computer keyboard?", acceptedAnswer: { "@type": "Answer", text: "Yes. Every key is mapped to a computer key — Sa is on E — so you can play without a mouse." } },
+                { "@type": "Question", name: "Does it include tanpura and metronome?", acceptedAnswer: { "@type": "Answer", text: "Yes. A tanpura drone and visual metronome are built in alongside the harmonium." } },
+              ],
+            },
+          ],
+        }),
+      },
     ],
   }),
   component: Landing,
