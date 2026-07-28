@@ -47,21 +47,21 @@
   /* Dark elegant defaults (this app is dark-only) */
   --background: oklch(0.16 0.012 60);
   --foreground: oklch(0.96 0.01 80);
-  --card: oklch(0.20 0.014 60);
+  --card: oklch(0.2 0.014 60);
   --card-foreground: oklch(0.96 0.01 80);
   --popover: oklch(0.18 0.014 60);
   --popover-foreground: oklch(0.96 0.01 80);
-  --primary: oklch(0.82 0.14 82);       /* warm gold */
+  --primary: oklch(0.82 0.14 82); /* warm gold */
   --primary-foreground: oklch(0.18 0.02 60);
   --secondary: oklch(0.26 0.02 55);
   --secondary-foreground: oklch(0.96 0.01 80);
   --muted: oklch(0.24 0.015 60);
   --muted-foreground: oklch(0.72 0.02 80);
-  --accent: oklch(0.34 0.06 45);        /* deep wood-copper */
+  --accent: oklch(0.34 0.06 45); /* deep wood-copper */
   --accent-foreground: oklch(0.96 0.01 80);
   --destructive: oklch(0.62 0.22 25);
   --destructive-foreground: oklch(0.98 0.01 80);
-  --border: oklch(0.30 0.02 60 / 60%);
+  --border: oklch(0.3 0.02 60 / 60%);
   --input: oklch(0.28 0.02 60);
   --ring: oklch(0.82 0.14 82 / 60%);
 
@@ -76,15 +76,20 @@
   * {
     border-color: var(--color-border);
   }
-  html, body {
-    background: radial-gradient(1200px 700px at 15% -10%, oklch(0.28 0.05 45 / 0.6), transparent 60%),
-                radial-gradient(1000px 600px at 100% 0%, oklch(0.24 0.08 30 / 0.5), transparent 60%),
-                var(--color-background);
+  html,
+  body {
+    background:
+      radial-gradient(1200px 700px at 15% -10%, oklch(0.28 0.05 45 / 0.6), transparent 60%),
+      radial-gradient(1000px 600px at 100% 0%, oklch(0.24 0.08 30 / 0.5), transparent 60%),
+      var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
   }
-  h1, h2, h3, h4 {
+  h1,
+  h2,
+  h3,
+  h4 {
     font-family: var(--font-display);
     letter-spacing: -0.02em;
   }
@@ -102,12 +107,14 @@
 
 @utility wood-panel {
   background:
-    repeating-linear-gradient(92deg,
-      oklch(0.30 0.05 45) 0px,
+    repeating-linear-gradient(
+      92deg,
+      oklch(0.3 0.05 45) 0px,
       oklch(0.26 0.045 42) 2px,
       oklch(0.32 0.055 46) 5px,
-      oklch(0.24 0.04 40) 7px),
-    linear-gradient(180deg, oklch(0.34 0.06 45), oklch(0.20 0.03 38));
+      oklch(0.24 0.04 40) 7px
+    ),
+    linear-gradient(180deg, oklch(0.34 0.06 45), oklch(0.2 0.03 38));
   box-shadow:
     inset 0 1px 0 oklch(1 0 0 / 0.08),
     inset 0 -2px 8px oklch(0 0 0 / 0.5),
@@ -122,13 +129,16 @@
 }
 
 @utility btn-gold {
-  background: linear-gradient(180deg, oklch(0.90 0.15 88), oklch(0.72 0.14 75));
+  background: linear-gradient(180deg, oklch(0.9 0.15 88), oklch(0.72 0.14 75));
   color: oklch(0.18 0.02 60);
   border: 1px solid oklch(0.95 0.13 88 / 0.6);
   box-shadow:
     inset 0 1px 0 oklch(1 0 0 / 0.5),
     0 10px 30px -10px oklch(0.75 0.15 80 / 0.6);
-  transition: transform .2s ease, box-shadow .2s ease, filter .2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    filter 0.2s ease;
 }
 @utility btn-gold-hover {
   &:hover {
@@ -144,7 +154,7 @@
   color: var(--gold);
   border: 1px solid oklch(0.82 0.14 82 / 0.35);
   background: oklch(0.82 0.14 82 / 0.06);
-  transition: all .2s ease;
+  transition: all 0.2s ease;
   &:hover {
     background: oklch(0.82 0.14 82 / 0.12);
     border-color: oklch(0.82 0.14 82 / 0.6);

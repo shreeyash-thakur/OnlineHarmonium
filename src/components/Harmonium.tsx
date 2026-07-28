@@ -17,14 +17,16 @@ export function Harmonium() {
   const keys = useMemo(() => buildKeys(), []);
   const kbLookup = useMemo(() => {
     const m = new Map<string, Key>();
-    keys.forEach(k => { if (k.kb) m.set(k.kb, k); });
+    keys.forEach((k) => {
+      if (k.kb) m.set(k.kb, k);
+    });
     return m;
   }, [keys]);
 
   useEffect(() => {
     getHarmonium()
       .preload()
-      ?.catch(err => setLoadError(err instanceof Error ? err.message : String(err)));
+      ?.catch((err) => setLoadError(err instanceof Error ? err.message : String(err)));
   }, []);
 
   async function startEngineOnce() {
@@ -57,33 +59,46 @@ export function Harmonium() {
     const engine = getHarmonium();
     engine.noteOn(note, 0.9);
     setBellowsPumping(true);
-    setHeld(prev => {
+    setHeld((prev) => {
       if (prev.has(note)) return prev;
-      const n = new Set(prev); n.add(note); return n;
+      const n = new Set(prev);
+      n.add(note);
+      return n;
     });
   }, []);
   const release = useCallback((note: string) => {
     getHarmonium().noteOff(note);
-    setHeld(prev => {
+    setHeld((prev) => {
       if (!prev.has(note)) return prev;
-      const n = new Set(prev); n.delete(note);
+      const n = new Set(prev);
+      n.delete(note);
       if (n.size === 0) setBellowsPumping(false);
       return n;
     });
   }, []);
 
-  useEffect(() => { if (engineReady.current) getHarmonium().applyPreset(preset); }, [preset]);
-  useEffect(() => { if (engineReady.current) getHarmonium().setMasterVolume(volume); }, [volume]);
+  useEffect(() => {
+    if (engineReady.current) getHarmonium().applyPreset(preset);
+  }, [preset]);
+  useEffect(() => {
+    if (engineReady.current) getHarmonium().setMasterVolume(volume);
+  }, [volume]);
 
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
       if (e.repeat || e.metaKey || e.ctrlKey || e.altKey) return;
       const k = kbLookup.get(e.key.toLowerCase());
-      if (k) { e.preventDefault(); press(k.note); }
+      if (k) {
+        e.preventDefault();
+        press(k.note);
+      }
     };
     const up = (e: KeyboardEvent) => {
       const k = kbLookup.get(e.key.toLowerCase());
-      if (k) { e.preventDefault(); release(k.note); }
+      if (k) {
+        e.preventDefault();
+        release(k.note);
+      }
     };
     window.addEventListener("keydown", down);
     window.addEventListener("keyup", up);
@@ -93,7 +108,14 @@ export function Harmonium() {
     };
   }, [kbLookup]);
 
-  useEffect(() => () => { try { getHarmonium().allOff(); } catch {} }, []);
+  useEffect(
+    () => () => {
+      try {
+        getHarmonium().allOff();
+      } catch {}
+    },
+    [],
+  );
 
   return (
     <div className="wood-panel rounded-3xl p-3 sm:p-5 md:p-6 relative overflow-hidden">
@@ -105,9 +127,13 @@ export function Harmonium() {
       {/* Top brass strip */}
       <header className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 sm:flex sm:flex-wrap sm:justify-between mb-4 sm:mb-6">
         <div className="flex min-w-0 items-center gap-3">
-          <div className="h-10 w-10 shrink-0 rounded-xl btn-gold grid place-items-center font-display font-bold">H</div>
+          <div className="h-10 w-10 shrink-0 rounded-xl btn-gold grid place-items-center font-display font-bold">
+            H
+          </div>
           <div className="min-w-0">
-            <div className="text-[10px] sm:text-xs uppercase tracking-widest text-gold-soft">Virtual Harmonium</div>
+            <div className="text-[10px] sm:text-xs uppercase tracking-widest text-gold-soft">
+              Virtual Harmonium
+            </div>
             <div className="font-display text-base sm:text-lg font-semibold gold-text truncate">
               {preset === "old-delhi" && "Old Delhi"}
               {preset === "scale-changer" && "Scale Changer"}
@@ -120,7 +146,7 @@ export function Harmonium() {
         <div className="col-span-2 flex flex-wrap items-center gap-2 text-xs">
           <Segmented
             value={preset}
-            onChange={v => setPreset(v as HarmoniumPreset)}
+            onChange={(v) => setPreset(v as HarmoniumPreset)}
             options={[
               { v: "old-delhi", l: "Old Delhi" },
               { v: "scale-changer", l: "Scale" },
@@ -130,7 +156,7 @@ export function Harmonium() {
           />
           <Segmented
             value={labels}
-            onChange={v => setLabels(v as LabelMode)}
+            onChange={(v) => setLabels(v as LabelMode)}
             options={[
               { v: "sargam", l: "Sargam" },
               { v: "western", l: "Notes" },
@@ -140,8 +166,12 @@ export function Harmonium() {
           <div className="flex items-center gap-2 px-3 py-1.5 rounded-full glass">
             <span className="text-muted-foreground">Vol</span>
             <input
-              type="range" min={0} max={1} step={0.01}
-              value={volume} onChange={e => setVolume(Number(e.target.value))}
+              type="range"
+              min={0}
+              max={1}
+              step={0.01}
+              value={volume}
+              onChange={(e) => setVolume(Number(e.target.value))}
               className="w-20 sm:w-24 accent-[color:var(--gold)]"
             />
           </div>
@@ -154,24 +184,34 @@ export function Harmonium() {
       <Keyboard keys={keys} labels={labels} held={held} onDown={press} onUp={release} />
 
       <p className="mt-3 sm:mt-4 text-[10px] sm:text-xs text-muted-foreground text-center px-2">
-        Play with mouse, touch, or your keyboard. Sa is on <kbd className="px-1.5 py-0.5 rounded bg-white/10">E</kbd>.
+        Play with mouse, touch, or your keyboard. Sa is on{" "}
+        <kbd className="px-1.5 py-0.5 rounded bg-white/10">E</kbd>.
       </p>
     </div>
   );
 }
 
-const Keyboard = memo(function Keyboard({ keys, labels, held, onDown, onUp }: {
-  keys: Key[]; labels: LabelMode; held: Set<string>;
-  onDown: (n: string) => void; onUp: (n: string) => void;
+const Keyboard = memo(function Keyboard({
+  keys,
+  labels,
+  held,
+  onDown,
+  onUp,
+}: {
+  keys: Key[];
+  labels: LabelMode;
+  held: Set<string>;
+  onDown: (n: string) => void;
+  onUp: (n: string) => void;
 }) {
-  const whites = keys.filter(k => !k.isBlack);
+  const whites = keys.filter((k) => !k.isBlack);
   const W = whites.length;
   const blacks = keys
     .map((k, i) => ({ k, i }))
-    .filter(x => x.k.isBlack)
+    .filter((x) => x.k.isBlack)
     .map(({ k, i }) => ({
       k,
-      whitesBefore: keys.slice(0, i).filter(x => !x.isBlack).length,
+      whitesBefore: keys.slice(0, i).filter((x) => !x.isBlack).length,
     }));
 
   const blackWidthPct = (100 / W) * 0.62;
@@ -186,7 +226,7 @@ const Keyboard = memo(function Keyboard({ keys, labels, held, onDown, onUp }: {
     >
       <div className="relative h-40 sm:h-52 md:h-60 rounded-xl overflow-hidden">
         <div className="absolute inset-0 flex">
-          {whites.map(k => (
+          {whites.map((k) => (
             <WhiteKey
               key={k.note}
               note={k.note}
@@ -223,21 +263,41 @@ const Keyboard = memo(function Keyboard({ keys, labels, held, onDown, onUp }: {
 });
 
 type WhiteKeyProps = {
-  note: string; kb?: string; sargam: string; western: string;
-  labels: LabelMode; active: boolean;
-  onDown: (n: string) => void; onUp: (n: string) => void;
+  note: string;
+  kb?: string;
+  sargam: string;
+  western: string;
+  labels: LabelMode;
+  active: boolean;
+  onDown: (n: string) => void;
+  onUp: (n: string) => void;
 };
 
-const WhiteKey = memo(function WhiteKey({ note, kb, sargam, western, labels, active, onDown, onUp }: WhiteKeyProps) {
-  const down = useCallback((e: React.PointerEvent) => {
-    e.preventDefault();
-    (e.currentTarget as HTMLButtonElement).setPointerCapture?.(e.pointerId);
-    onDown(note);
-  }, [note, onDown]);
-  const up = useCallback((e: React.PointerEvent) => {
-    e.preventDefault();
-    onUp(note);
-  }, [note, onUp]);
+const WhiteKey = memo(function WhiteKey({
+  note,
+  kb,
+  sargam,
+  western,
+  labels,
+  active,
+  onDown,
+  onUp,
+}: WhiteKeyProps) {
+  const down = useCallback(
+    (e: React.PointerEvent) => {
+      e.preventDefault();
+      (e.currentTarget as HTMLButtonElement).setPointerCapture?.(e.pointerId);
+      onDown(note);
+    },
+    [note, onDown],
+  );
+  const up = useCallback(
+    (e: React.PointerEvent) => {
+      e.preventDefault();
+      onUp(note);
+    },
+    [note, onUp],
+  );
 
   return (
     <button
@@ -262,35 +322,58 @@ const WhiteKey = memo(function WhiteKey({ note, kb, sargam, western, labels, act
         <div className="px-1 py-0.5 rounded text-[8px] sm:text-[9px] font-bold bg-neutral-800 text-neutral-100">
           {kb}
         </div>
-      ) : <div />}
+      ) : (
+        <div />
+      )}
 
       {labels !== "none" ? (
         <div className="font-bold leading-none text-sm sm:text-base text-amber-700">
           {labels === "sargam" ? sargam : western}
         </div>
-      ) : <div />}
+      ) : (
+        <div />
+      )}
 
       {labels === "sargam" ? (
         <div className="px-1 py-0.5 rounded text-[8px] sm:text-[9px] font-bold bg-teal-100 text-teal-700">
           {western}
         </div>
-      ) : <div />}
+      ) : (
+        <div />
+      )}
     </button>
   );
 });
 
 type BlackKeyProps = WhiteKeyProps & { leftPct: number; widthPct: number };
 
-const BlackKey = memo(function BlackKey({ note, kb, sargam, western, labels, active, leftPct, widthPct, onDown, onUp }: BlackKeyProps) {
-  const down = useCallback((e: React.PointerEvent) => {
-    e.preventDefault();
-    (e.currentTarget as HTMLButtonElement).setPointerCapture?.(e.pointerId);
-    onDown(note);
-  }, [note, onDown]);
-  const up = useCallback((e: React.PointerEvent) => {
-    e.preventDefault();
-    onUp(note);
-  }, [note, onUp]);
+const BlackKey = memo(function BlackKey({
+  note,
+  kb,
+  sargam,
+  western,
+  labels,
+  active,
+  leftPct,
+  widthPct,
+  onDown,
+  onUp,
+}: BlackKeyProps) {
+  const down = useCallback(
+    (e: React.PointerEvent) => {
+      e.preventDefault();
+      (e.currentTarget as HTMLButtonElement).setPointerCapture?.(e.pointerId);
+      onDown(note);
+    },
+    [note, onDown],
+  );
+  const up = useCallback(
+    (e: React.PointerEvent) => {
+      e.preventDefault();
+      onUp(note);
+    },
+    [note, onUp],
+  );
 
   return (
     <button
@@ -319,22 +402,32 @@ const BlackKey = memo(function BlackKey({ note, kb, sargam, western, labels, act
         <div className="px-1 py-0.5 rounded text-[8px] sm:text-[9px] font-bold bg-white/85 text-neutral-900">
           {kb}
         </div>
-      ) : <div />}
+      ) : (
+        <div />
+      )}
       {labels !== "none" ? (
         <div className="font-bold leading-none text-[10px] sm:text-xs text-amber-300">
           {labels === "sargam" ? sargam : western}
         </div>
-      ) : <div />}
+      ) : (
+        <div />
+      )}
     </button>
   );
 });
 
-function Segmented<T extends string>({ value, onChange, options }: {
-  value: T; onChange: (v: T) => void; options: { v: T; l: string }[];
+function Segmented<T extends string>({
+  value,
+  onChange,
+  options,
+}: {
+  value: T;
+  onChange: (v: T) => void;
+  options: { v: T; l: string }[];
 }) {
   return (
     <div className="glass rounded-full p-1 flex">
-      {options.map(o => (
+      {options.map((o) => (
         <button
           key={o.v}
           onClick={() => onChange(o.v)}
@@ -378,10 +471,13 @@ function Bellows({ pumping }: { pumping: boolean }) {
       <AnimatePresence>
         {pumping && (
           <motion.div
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
             className="absolute inset-0 pointer-events-none"
             style={{
-              background: "radial-gradient(400px 60px at 50% 50%, oklch(0.85 0.15 80 / 0.15), transparent 70%)",
+              background:
+                "radial-gradient(400px 60px at 50% 50%, oklch(0.85 0.15 80 / 0.15), transparent 70%)",
             }}
           />
         )}

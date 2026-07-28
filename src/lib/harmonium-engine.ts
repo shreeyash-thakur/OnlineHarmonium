@@ -12,13 +12,18 @@ export type HarmoniumPreset = "old-delhi" | "scale-changer" | "concert" | "vinta
 // The source sample is recorded at D4 (MIDI 62) — matches the reference project's rootKey.
 const SAMPLE_BASE_MIDI = 62;
 
-const presetConfig: Record<HarmoniumPreset, {
-  filter: number; reverb: number; brightness: number;
-}> = {
-  "old-delhi":     { filter: 4200, reverb: 0.05, brightness: 0.95 },
-  "scale-changer": { filter: 5200, reverb: 0.03, brightness: 1.00 },
-  "concert":       { filter: 6500, reverb: 0.10, brightness: 1.10 },
-  "vintage":       { filter: 3200, reverb: 0.12, brightness: 0.85 },
+const presetConfig: Record<
+  HarmoniumPreset,
+  {
+    filter: number;
+    reverb: number;
+    brightness: number;
+  }
+> = {
+  "old-delhi": { filter: 4200, reverb: 0.05, brightness: 0.95 },
+  "scale-changer": { filter: 5200, reverb: 0.03, brightness: 1.0 },
+  concert: { filter: 6500, reverb: 0.1, brightness: 1.1 },
+  vintage: { filter: 3200, reverb: 0.12, brightness: 0.85 },
 };
 
 function noteToMidi(note: string): number {
@@ -63,7 +68,7 @@ class HarmoniumEngine {
     if (typeof window === "undefined") return;
 
     if (!this.preloadPromise) {
-      this.preloadPromise = this.prepareAudio().catch(error => {
+      this.preloadPromise = this.prepareAudio().catch((error) => {
         this.preloadPromise = null;
         throw error;
       });
@@ -88,7 +93,7 @@ class HarmoniumEngine {
       this.started = true;
       this.applyPreset(this.currentPreset);
       this.setMasterVolume(this.userVolume);
-    })().catch(error => {
+    })().catch((error) => {
       this.startPromise = null;
       throw error;
     });
@@ -97,7 +102,15 @@ class HarmoniumEngine {
   }
 
   private async prepareAudio() {
-    if (this.ctx && this.buffer && this.reverbBuffer && this.masterGain && this.filter && this.bellowsGain) return;
+    if (
+      this.ctx &&
+      this.buffer &&
+      this.reverbBuffer &&
+      this.masterGain &&
+      this.filter &&
+      this.bellowsGain
+    )
+      return;
 
     const AC = window.AudioContext || (window as any).webkitAudioContext;
     const ctx = this.ctx ?? new AC({ latencyHint: "interactive" });
@@ -106,17 +119,17 @@ class HarmoniumEngine {
     // Fetch sample + IR in parallel
     const [sampleBuf, irBuf] = await Promise.all([
       fetch(SAMPLE_URL)
-        .then(r => {
+        .then((r) => {
           if (!r.ok) throw new Error(`Missing ${SAMPLE_URL} (${r.status}) — see README for setup`);
           return r.arrayBuffer();
         })
-        .then(b => ctx.decodeAudioData(b)),
+        .then((b) => ctx.decodeAudioData(b)),
       fetch(REVERB_URL)
-        .then(r => {
+        .then((r) => {
           if (!r.ok) throw new Error(`Missing ${REVERB_URL} (${r.status}) — see README for setup`);
           return r.arrayBuffer();
         })
-        .then(b => ctx.decodeAudioData(b)),
+        .then((b) => ctx.decodeAudioData(b)),
     ]);
     this.buffer = sampleBuf;
     this.reverbBuffer = irBuf;
@@ -189,7 +202,11 @@ class HarmoniumEngine {
     // Fast retrigger: if already sounding, kill previous instantly.
     const existing = this.active.get(note);
     if (existing) {
-      try { existing.src.stop(); existing.src.disconnect(); existing.gain.disconnect(); } catch {}
+      try {
+        existing.src.stop();
+        existing.src.disconnect();
+        existing.gain.disconnect();
+      } catch {}
       this.active.delete(note);
     }
 
@@ -230,10 +247,18 @@ class HarmoniumEngine {
     voice.gain.gain.cancelScheduledValues(t);
     voice.gain.gain.setValueAtTime(voice.gain.gain.value, t);
     voice.gain.gain.linearRampToValueAtTime(0, t + releaseTime);
-    try { voice.src.stop(t + releaseTime + 0.05); } catch {}
-    setTimeout(() => {
-      try { voice.src.disconnect(); voice.gain.disconnect(); } catch {}
-    }, (releaseTime + 0.1) * 1000);
+    try {
+      voice.src.stop(t + releaseTime + 0.05);
+    } catch {}
+    setTimeout(
+      () => {
+        try {
+          voice.src.disconnect();
+          voice.gain.disconnect();
+        } catch {}
+      },
+      (releaseTime + 0.1) * 1000,
+    );
 
     if (this.active.size === 0) {
       bellowsGain.gain.cancelScheduledValues(t);

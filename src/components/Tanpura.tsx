@@ -23,7 +23,9 @@ export function Tanpura() {
     };
   }, []);
 
-  useEffect(() => { if (gainRef.current) gainRef.current.gain.rampTo(volume, 0.2); }, [volume]);
+  useEffect(() => {
+    if (gainRef.current) gainRef.current.gain.rampTo(volume, 0.2);
+  }, [volume]);
 
   async function toggle() {
     await Tone.start();
@@ -37,7 +39,9 @@ export function Tanpura() {
       gainRef.current = new Tone.Gain(volume).toDestination();
       const reverb = new Tone.Reverb({ decay: 5, wet: 0.5 }).connect(gainRef.current);
       synthRef.current = new Tone.PluckSynth({
-        attackNoise: 0.5, dampening: 2200, resonance: 0.95,
+        attackNoise: 0.5,
+        dampening: 2200,
+        resonance: 0.95,
       }).connect(reverb);
     }
     const tonicOct = tonic + "3";
@@ -56,7 +60,9 @@ export function Tanpura() {
     setPlaying(true);
   }
 
-  useEffect(() => { Tone.getTransport().bpm.rampTo(tempo, 0.5); }, [tempo]);
+  useEffect(() => {
+    Tone.getTransport().bpm.rampTo(tempo, 0.5);
+  }, [tempo]);
 
   return (
     <div className="glass rounded-2xl p-5">
@@ -76,30 +82,55 @@ export function Tanpura() {
       <div className="grid grid-cols-2 gap-3 text-xs">
         <label className="glass rounded-xl p-3 flex flex-col gap-2">
           <span className="text-muted-foreground">Tonic (Sa)</span>
-          <select value={tonic} onChange={e => setTonic(e.target.value)}
-            className="bg-transparent outline-none">
-            {PITCHES.map(p => <option key={p} value={p} className="bg-neutral-900">{p}</option>)}
+          <select
+            value={tonic}
+            onChange={(e) => setTonic(e.target.value)}
+            className="bg-transparent outline-none"
+          >
+            {PITCHES.map((p) => (
+              <option key={p} value={p} className="bg-neutral-900">
+                {p}
+              </option>
+            ))}
           </select>
         </label>
         <label className="glass rounded-xl p-3 flex flex-col gap-2">
           <span className="text-muted-foreground">Style</span>
-          <select value={style} onChange={e => setStyle(e.target.value as "sa-pa" | "sa-ma")}
-            className="bg-transparent outline-none">
-            <option value="sa-pa" className="bg-neutral-900">Sa – Pa</option>
-            <option value="sa-ma" className="bg-neutral-900">Sa – Ma</option>
+          <select
+            value={style}
+            onChange={(e) => setStyle(e.target.value as "sa-pa" | "sa-ma")}
+            className="bg-transparent outline-none"
+          >
+            <option value="sa-pa" className="bg-neutral-900">
+              Sa – Pa
+            </option>
+            <option value="sa-ma" className="bg-neutral-900">
+              Sa – Ma
+            </option>
           </select>
         </label>
         <label className="glass rounded-xl p-3 flex flex-col gap-2 col-span-2">
           <span className="text-muted-foreground">Tempo · {tempo} bpm</span>
-          <input type="range" min={40} max={140} value={tempo}
-            onChange={e => setTempo(Number(e.target.value))}
-            className="accent-[color:var(--gold)]" />
+          <input
+            type="range"
+            min={40}
+            max={140}
+            value={tempo}
+            onChange={(e) => setTempo(Number(e.target.value))}
+            className="accent-[color:var(--gold)]"
+          />
         </label>
         <label className="glass rounded-xl p-3 flex flex-col gap-2 col-span-2">
           <span className="text-muted-foreground">Volume</span>
-          <input type="range" min={0} max={1} step={0.01} value={volume}
-            onChange={e => setVolume(Number(e.target.value))}
-            className="accent-[color:var(--gold)]" />
+          <input
+            type="range"
+            min={0}
+            max={1}
+            step={0.01}
+            value={volume}
+            onChange={(e) => setVolume(Number(e.target.value))}
+            className="accent-[color:var(--gold)]"
+          />
         </label>
       </div>
     </div>
