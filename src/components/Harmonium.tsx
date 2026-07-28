@@ -55,7 +55,7 @@ export function Harmonium() {
     }
 
     const engine = getHarmonium();
-    engine.noteOn(note, 0.9);
+    engine.noteOn(note);
     setBellowsPumping(true);
     setHeld(prev => {
       if (prev.has(note)) return prev;

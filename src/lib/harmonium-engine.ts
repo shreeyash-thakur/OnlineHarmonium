@@ -1,6 +1,17 @@
 // Sample-based harmonium engine using Web Audio API.
-// Uses the original "kannan" harmonium sustain sample + convolution reverb IR
-// from the Web Harmonium project by Rajaraman Iyer, for authentic reed sound.
+//
+// This intentionally mirrors the playback mechanics of the reference
+// "Web Harmonium" project by Rajaraman Iyer (rajaramaniyer.github.io/webharmonium.html)
+// note-for-note, using the same "kannan" harmonium sustain sample and
+// convolution reverb IR, so the reed tone matches exactly:
+//   - the sample plays from its very start (offset 0), preserving the
+//     natural reed attack chiff, then loops the full remainder of the
+//     buffer from loopStart (no arbitrary loop-end truncation)
+//   - notes have NO synthetic attack/release envelope — they start and
+//     stop instantly, exactly like the original engine
+//   - there is no lowpass filter or tonal coloring applied to the signal
+//   - reverb is an additive parallel send (dry + wet), not a crossfade,
+//     and is off by default — matching the original's toggle
 //
 // The .wav files live in /public/audio and are fetched by root-relative path
 // at runtime (see README for how to obtain them).
@@ -12,13 +23,15 @@ export type HarmoniumPreset = "old-delhi" | "scale-changer" | "concert" | "vinta
 // The source sample is recorded at D4 (MIDI 62) — matches the reference project's rootKey.
 const SAMPLE_BASE_MIDI = 62;
 
-const presetConfig: Record<HarmoniumPreset, {
-  filter: number; reverb: number; brightness: number;
-}> = {
-  "old-delhi":     { filter: 4200, reverb: 0.05, brightness: 0.95 },
-  "scale-changer": { filter: 5200, reverb: 0.03, brightness: 1.00 },
-  "concert":       { filter: 6500, reverb: 0.10, brightness: 1.10 },
-  "vintage":       { filter: 3200, reverb: 0.12, brightness: 0.85 },
+// Presets only vary the reverb send amount (an additive convolver send),
+// exactly like toggling "Reverb" in the reference app. They never touch
+// filtering, gain "brightness", or the raw reed tone, so the base sound
+// is identical across presets and matches the reference 1:1.
+const presetConfig: Record<HarmoniumPreset, { reverb: number }> = {
+  "old-delhi":     { reverb: 0 },
+  "scale-changer": { reverb: 0.15 },
+  "concert":       { reverb: 0.3 },
+  "vintage":       { reverb: 0.45 },
 };
 
 function noteToMidi(note: string): number {
@@ -32,14 +45,10 @@ function noteToMidi(note: string): number {
   return (oct + 1) * 12 + pc;
 }
 
-type Voice = {
-  src: AudioBufferSourceNode;
-  gain: GainNode;
-};
-
-const NOTE_START_OFFSET = 0.5;
-const NOTE_ATTACK_TIME = 0.001;
-const NOTE_RELEASE_TIME = 0.012;
+// loopStart matches the reference exactly; loopEnd is intentionally left
+// unset so playback loops the full remainder of the buffer (native
+// AudioBufferSourceNode default), same as the original.
+const LOOP_START = 0.5;
 
 class HarmoniumEngine {
   private started = false;
@@ -49,13 +58,9 @@ class HarmoniumEngine {
   private buffer: AudioBuffer | null = null;
   private reverbBuffer: AudioBuffer | null = null;
   private masterGain: GainNode | null = null;
-  private dryGain: GainNode | null = null;
   private wetGain: GainNode | null = null;
-  private filter: BiquadFilterNode | null = null;
   private convolver: ConvolverNode | null = null;
-  private bellowsGain: GainNode | null = null;
-  private bellowsSrc: AudioBufferSourceNode | null = null;
-  private active = new Map<string, Voice>();
+  private active = new Map<string, AudioBufferSourceNode>();
   private currentPreset: HarmoniumPreset = "old-delhi";
   private userVolume = 0.85;
 
@@ -97,7 +102,7 @@ class HarmoniumEngine {
   }
 
   private async prepareAudio() {
-    if (this.ctx && this.buffer && this.reverbBuffer && this.masterGain && this.filter && this.bellowsGain) return;
+    if (this.ctx && this.buffer && this.reverbBuffer && this.masterGain) return;
 
     const AC = window.AudioContext || (window as any).webkitAudioContext;
     const ctx = this.ctx ?? new AC({ latencyHint: "interactive" });
@@ -121,41 +126,19 @@ class HarmoniumEngine {
     this.buffer = sampleBuf;
     this.reverbBuffer = irBuf;
 
-    // Signal chain: voices -> filter -> [dry -> master, wet -> convolver -> master]
+    // Signal chain: voices -> masterGain -> destination (dry, always)
+    //                          masterGain -> convolver -> wetGain -> destination (additive send)
+    // This mirrors the reference engine's gainNode -> destination (+ optional
+    // gainNode -> reverbNode -> destination) routing exactly — no dry/wet
+    // crossfade, no filtering, no synthetic noise layers.
     this.masterGain = ctx.createGain();
     this.masterGain.gain.value = this.userVolume;
     this.masterGain.connect(ctx.destination);
 
-    this.filter = ctx.createBiquadFilter();
-    this.filter.type = "lowpass";
-    this.filter.Q.value = 0.5;
-
-    this.dryGain = ctx.createGain();
     this.wetGain = ctx.createGain();
     this.convolver = ctx.createConvolver();
     this.convolver.buffer = this.reverbBuffer;
-
-    this.filter.connect(this.dryGain).connect(this.masterGain);
-    this.filter.connect(this.convolver).connect(this.wetGain).connect(this.masterGain);
-    this.dryGain.gain.value = 1.0;
-
-    // Bellows air noise (very subtle) — filtered white noise loop
-    const noiseLen = 2 * ctx.sampleRate;
-    const noiseBuf = ctx.createBuffer(1, noiseLen, ctx.sampleRate);
-    const nd = noiseBuf.getChannelData(0);
-    for (let i = 0; i < noiseLen; i++) nd[i] = (Math.random() * 2 - 1) * 0.5;
-    const nSrc = ctx.createBufferSource();
-    nSrc.buffer = noiseBuf;
-    nSrc.loop = true;
-    const nFilt = ctx.createBiquadFilter();
-    nFilt.type = "bandpass";
-    nFilt.frequency.value = 700;
-    nFilt.Q.value = 0.8;
-    this.bellowsGain = ctx.createGain();
-    this.bellowsGain.gain.value = 0.005;
-    nSrc.connect(nFilt).connect(this.bellowsGain).connect(this.masterGain);
-    nSrc.start();
-    this.bellowsSrc = nSrc;
+    this.masterGain.connect(this.convolver).connect(this.wetGain).connect(ctx.destination);
 
     this.applyPreset(this.currentPreset);
   }
@@ -163,82 +146,52 @@ class HarmoniumEngine {
   applyPreset(preset: HarmoniumPreset) {
     this.currentPreset = preset;
     const ctx = this.ctx;
-    const filter = this.filter;
     const wetGain = this.wetGain;
-    const dryGain = this.dryGain;
-    const masterGain = this.masterGain;
-    if (!ctx || !filter || !wetGain || !dryGain || !masterGain) return;
+    if (!ctx || !wetGain) return;
     const c = presetConfig[preset];
     const t = ctx.currentTime;
-    filter.frequency.cancelScheduledValues(t);
-    filter.frequency.setTargetAtTime(c.filter, t, 0.01);
     wetGain.gain.cancelScheduledValues(t);
-    dryGain.gain.cancelScheduledValues(t);
-    masterGain.gain.cancelScheduledValues(t);
     wetGain.gain.setTargetAtTime(c.reverb, t, 0.01);
-    dryGain.gain.setTargetAtTime(1 - c.reverb * 0.4, t, 0.01);
-    masterGain.gain.setTargetAtTime(this.userVolume * c.brightness, t, 0.01);
   }
 
-  noteOn(note: string, velocity = 0.9) {
+  noteOn(note: string) {
     const ctx = this.ctx;
     const buffer = this.buffer;
-    const filter = this.filter;
-    const bellowsGain = this.bellowsGain;
-    if (!this.started || !ctx || !buffer || !filter || !bellowsGain) return;
-    // Fast retrigger: if already sounding, kill previous instantly.
+    const masterGain = this.masterGain;
+    if (!this.started || !ctx || !buffer || !masterGain) return;
+    // Fast retrigger: if already sounding, kill previous instantly (matches
+    // the reference engine's setSourceNode(), which stops(0) before rearming).
     const existing = this.active.get(note);
     if (existing) {
-      try { existing.src.stop(); existing.src.disconnect(); existing.gain.disconnect(); } catch {}
+      try { existing.stop(); existing.disconnect(); } catch {}
       this.active.delete(note);
     }
 
     const src = ctx.createBufferSource();
     src.buffer = buffer;
     src.loop = true;
-    src.loopStart = NOTE_START_OFFSET;
-    src.loopEnd = 7.5;
+    src.loopStart = LOOP_START;
+    // loopEnd intentionally left unset — loops the full remainder of the
+    // buffer, same as the reference (it never sets loopEnd).
     const detuneCents = (noteToMidi(note) - SAMPLE_BASE_MIDI) * 100;
     src.detune.value = detuneCents;
 
-    const gain = ctx.createGain();
-    const v = Math.max(0.2, Math.min(1, velocity));
-    const t = ctx.currentTime;
-    // Near-instant attack: jump straight into the stable reed sustain portion.
-    gain.gain.setValueAtTime(0, t);
-    gain.gain.linearRampToValueAtTime(v * 0.85, t + NOTE_ATTACK_TIME);
+    src.connect(masterGain);
+    // Start immediately from the very beginning of the sample (offset 0),
+    // preserving the natural reed attack — no synthetic envelope.
+    src.start(0);
 
-    src.connect(gain).connect(filter);
-    src.start(0, NOTE_START_OFFSET);
-
-    this.active.set(note, { src, gain });
-
-    // Bump bellows air
-    bellowsGain.gain.cancelScheduledValues(t);
-    bellowsGain.gain.setTargetAtTime(0.05, t, 0.01);
+    this.active.set(note, src);
   }
 
   noteOff(note: string) {
-    const ctx = this.ctx;
-    const bellowsGain = this.bellowsGain;
-    if (!this.started || !ctx || !bellowsGain) return;
-    const voice = this.active.get(note);
-    if (!voice) return;
+    if (!this.started) return;
+    const src = this.active.get(note);
+    if (!src) return;
     this.active.delete(note);
-    const t = ctx.currentTime;
-    const releaseTime = NOTE_RELEASE_TIME;
-    voice.gain.gain.cancelScheduledValues(t);
-    voice.gain.gain.setValueAtTime(voice.gain.gain.value, t);
-    voice.gain.gain.linearRampToValueAtTime(0, t + releaseTime);
-    try { voice.src.stop(t + releaseTime + 0.05); } catch {}
-    setTimeout(() => {
-      try { voice.src.disconnect(); voice.gain.disconnect(); } catch {}
-    }, (releaseTime + 0.1) * 1000);
-
-    if (this.active.size === 0) {
-      bellowsGain.gain.cancelScheduledValues(t);
-      bellowsGain.gain.setTargetAtTime(0.005, t, 0.03);
-    }
+    // Instant, hard stop — matches the reference engine's immediate
+    // sourceNodes[i].stop(0) with no release ramp.
+    try { src.stop(); src.disconnect(); } catch {}
   }
 
   allOff() {
@@ -250,10 +203,9 @@ class HarmoniumEngine {
     const ctx = this.ctx;
     const masterGain = this.masterGain;
     if (!ctx || !masterGain) return;
-    const c = presetConfig[this.currentPreset];
     const t = ctx.currentTime;
     masterGain.gain.cancelScheduledValues(t);
-    masterGain.gain.setTargetAtTime(this.userVolume * c.brightness, t, 0.01);
+    masterGain.gain.setTargetAtTime(this.userVolume, t, 0.01);
   }
 }
 

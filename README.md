@@ -1,6 +1,6 @@
 # Riyaz — Virtual Harmonium Online
 
-A premium virtual harmonium in the browser, with realistic sound, tanpura, and metronome — built for practice and riyaz anywhere.
+A premium virtual harmonium in the browser, with realistic sampled reed sound — built for practice and riyaz anywhere.
 
 ## Built with
 

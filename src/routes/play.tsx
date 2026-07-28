@@ -1,23 +1,22 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Harmonium } from "@/components/Harmonium";
-import { Tanpura } from "@/components/Tanpura";
-import { Metronome } from "@/components/Metronome";
+import { AdSlot } from "@/components/AdSlot";
 import { ArrowLeft } from "lucide-react";
 
 export const Route = createFileRoute("/play")({
   head: () => ({
     meta: [
-      { title: "Play Virtual Harmonium Online — Free with Tanpura & Metronome | Riyaz" },
-      { name: "description", content: "Play a realistic online harmonium free in your browser. 27-key scale-changer layout, sargam and western labels, tanpura drone, metronome, and computer keyboard support." },
-      { name: "keywords", content: "play harmonium online, virtual harmonium, online harmonium keyboard, tanpura online, harmonium sargam" },
+      { title: "Play Virtual Harmonium Online — Free, Realistic Sampled Reeds | Riyaz" },
+      { name: "description", content: "Play a realistic online harmonium free in your browser. 27-key scale-changer layout, sargam and western labels, and computer keyboard support." },
+      { name: "keywords", content: "play harmonium online, virtual harmonium, online harmonium keyboard, harmonium sargam" },
       { name: "robots", content: "index, follow, max-image-preview:large" },
       { property: "og:title", content: "Play the Virtual Harmonium — Free Online" },
-      { property: "og:description", content: "Realistic sampled harmonium with tanpura and metronome. Play in the browser, free." },
+      { property: "og:description", content: "Realistic sampled harmonium, playable in the browser, free." },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "/play" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "Play Virtual Harmonium Online" },
-      { name: "twitter:description", content: "Realistic sampled harmonium with tanpura and metronome. Play free in your browser." },
+      { name: "twitter:description", content: "Realistic sampled harmonium. Play free in your browser." },
     ],
     links: [{ rel: "canonical", href: "/play" }],
     scripts: [
@@ -51,12 +50,11 @@ function PlayPage() {
       </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 pb-16">
-        <h1 className="sr-only">Play the Virtual Harmonium Online — Free with Tanpura and Metronome</h1>
-        <div className="grid lg:grid-cols-[1fr_320px] gap-6">
+        <h1 className="sr-only">Play the Virtual Harmonium Online</h1>
+        <div className="grid lg:grid-cols-[1fr_300px] gap-6">
           <Harmonium />
-          <aside className="flex flex-col gap-4">
-            <Tanpura />
-            <Metronome />
+          <aside className="flex flex-col gap-4 lg:self-start">
+            <AdSlot />
           </aside>
         </div>
       </main>

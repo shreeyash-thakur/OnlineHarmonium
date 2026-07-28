@@ -78,7 +78,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "theme-color", content: "#1a130c" },
       { name: "format-detection", content: "telephone=no" },
       { title: "Riyaz — Virtual Harmonium Online" },
-      { name: "description", content: "A premium online harmonium with realistic sound, tanpura and metronome." },
+      { name: "description", content: "A premium online harmonium with realistic sampled reed sound." },
       { property: "og:site_name", content: "Riyaz" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -98,7 +98,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "@type": "WebSite",
           name: "Riyaz",
           url: "/",
-          description: "Free online virtual harmonium with tanpura, shruti box and metronome.",
+          description: "Free online virtual harmonium with realistic sampled reeds.",
         }),
       },
       {

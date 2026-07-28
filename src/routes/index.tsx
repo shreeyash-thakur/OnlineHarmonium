@@ -1,23 +1,23 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import {
-  Music, Piano, Sparkles, WifiOff, Zap, Radio, Mic2, BookOpen, Cable, Gauge,
+  Music, Piano, Sparkles, WifiOff, Zap, BookOpen, Cable, Gauge,
 } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Virtual Harmonium Online — Free Browser Harmonium, Tanpura & Metronome | Riyaz" },
-      { name: "description", content: "Play a free online harmonium in your browser with realistic sampled reeds, sargam labels, tanpura drone, and metronome. No installs — instant, MIDI-ready, works on mobile and desktop." },
-      { name: "keywords", content: "virtual harmonium, online harmonium, harmonium online, harmonium app, tanpura online, shruti box, sargam, riyaz, indian classical music, learn harmonium" },
+      { title: "Virtual Harmonium Online — Free Browser Harmonium | Riyaz" },
+      { name: "description", content: "Play a free online harmonium in your browser with realistic sampled reeds and sargam labels. No installs — instant, MIDI-ready, works on mobile and desktop." },
+      { name: "keywords", content: "virtual harmonium, online harmonium, harmonium online, harmonium app, sargam, riyaz, indian classical music, learn harmonium" },
       { name: "robots", content: "index, follow, max-image-preview:large" },
       { property: "og:title", content: "Virtual Harmonium Online — Play Free in Your Browser" },
-      { property: "og:description", content: "Realistic sampled harmonium with tanpura, shruti box, metronome and sargam learning tools. Free, instant, no install." },
+      { property: "og:description", content: "Realistic sampled harmonium with sargam learning tools. Free, instant, no install." },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "/" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "Virtual Harmonium Online — Riyaz" },
-      { name: "twitter:description", content: "Play a beautifully crafted online harmonium with tanpura and metronome. Free, in your browser." },
+      { name: "twitter:description", content: "Play a beautifully crafted online harmonium. Free, in your browser." },
     ],
     links: [{ rel: "canonical", href: "/" }],
     scripts: [
@@ -32,7 +32,7 @@ export const Route = createFileRoute("/")({
               applicationCategory: "MusicApplication",
               operatingSystem: "Any (Web Browser)",
               url: "/",
-              description: "Free online harmonium with realistic sampled reeds, tanpura, shruti box, metronome, and sargam labels.",
+              description: "Free online harmonium with realistic sampled reeds and sargam labels.",
               offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
               aggregateRating: { "@type": "AggregateRating", ratingValue: "4.9", ratingCount: "128" },
             },
@@ -42,7 +42,6 @@ export const Route = createFileRoute("/")({
                 { "@type": "Question", name: "Is the virtual harmonium free?", acceptedAnswer: { "@type": "Answer", text: "Yes. Riyaz is completely free to play in your browser with no installs or sign-ups." } },
                 { "@type": "Question", name: "Does it work on mobile?", acceptedAnswer: { "@type": "Answer", text: "Yes. The harmonium keyboard is touch-optimised and scales to fit any phone, tablet or laptop screen." } },
                 { "@type": "Question", name: "Can I use my computer keyboard?", acceptedAnswer: { "@type": "Answer", text: "Yes. Every key is mapped to a computer key — Sa is on E — so you can play without a mouse." } },
-                { "@type": "Question", name: "Does it include tanpura and metronome?", acceptedAnswer: { "@type": "Answer", text: "Yes. A tanpura drone and visual metronome are built in alongside the harmonium." } },
               ],
             },
           ],
@@ -110,7 +109,7 @@ function Hero() {
           initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.2 }}
           className="mt-6 text-lg text-muted-foreground max-w-2xl mx-auto"
         >
-          Realistic reeds, breathing bellows, a built-in tanpura and shruti box —
+          Realistic sampled reeds and breathing bellows —
           crafted for riyaz, bhajans, film songs and classical practice.
         </motion.p>
 
@@ -195,9 +194,7 @@ const features = [
   { icon: WifiOff, title: "No installation", desc: "Runs entirely in your browser. Zero setup." },
   { icon: Music, title: "Real sampled reeds", desc: "Warm harmonium tone with authentic bellows breath." },
   { icon: Cable, title: "MIDI-ready", desc: "Plug in a MIDI controller for expressive play." },
-  { icon: Mic2, title: "Tanpura & Shruti", desc: "Studio-quality drone companions built-in." },
   { icon: BookOpen, title: "Learn ragas", desc: "Sargam labels, scales and practice modes." },
-  { icon: Radio, title: "Metronome", desc: "Beautiful visual pulse with accented beats." },
   { icon: WifiOff, title: "Works offline", desc: "Install as an app and practice anywhere." },
   { icon: Zap, title: "Lightning fast", desc: "Optimised audio graph, sub-frame response." },
   { icon: Gauge, title: "Precision tuned", desc: "Equal-tempered and Indian temperament ready." },
@@ -235,15 +232,14 @@ function Features() {
 
 function Modes() {
   const items = [
-    { title: "Harmonium", desc: "Play a full 3–5 octave harmonium with four premium presets.", to: "/play" },
-    { title: "Tanpura", desc: "Warm plucked drone in Sa–Pa or Sa–Ma at any pitch." },
-    { title: "Metronome", desc: "Visual, accented, tempo up to 220 bpm." },
+    { title: "Harmonium", desc: "Play a full 27-key scale-changer harmonium with authentic reed presets.", to: "/play" },
+    { title: "MIDI Play", desc: "Plug in a MIDI keyboard for expressive, low-latency practice.", to: "/play" },
     { title: "Learn", desc: "Sargam and western note labels on every key.", to: "/play" },
   ];
   return (
     <section id="modes" className="pb-24">
       <div className="max-w-6xl mx-auto px-6">
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
           {items.map((m, i) => {
             const inner = (
               <motion.div
