@@ -51,6 +51,7 @@ function PlayPage() {
       </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 pb-16">
+        <h1 className="sr-only">Play the Virtual Harmonium Online — Free with Tanpura and Metronome</h1>
         <div className="grid lg:grid-cols-[1fr_320px] gap-6">
           <Harmonium />
           <aside className="flex flex-col gap-4">

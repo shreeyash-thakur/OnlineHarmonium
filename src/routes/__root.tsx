@@ -78,6 +78,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { name: "theme-color", content: "#1a130c" },
+      { name: "format-detection", content: "telephone=no" },
       { title: "Riyaz — Virtual Harmonium Online" },
       { name: "description", content: "A premium online harmonium with realistic sound, tanpura and metronome." },
       { property: "og:site_name", content: "Riyaz" },
@@ -90,6 +91,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&family=DM+Sans:wght@400;500;600&display=swap" },
       { rel: "stylesheet", href: appCss },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+    ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          name: "Riyaz",
+          url: "/",
+          description: "Free online virtual harmonium with tanpura, shruti box and metronome.",
+        }),
+      },
     ],
   }),
   shellComponent: RootShell,
