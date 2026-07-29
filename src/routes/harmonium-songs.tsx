@@ -42,14 +42,14 @@ export const Route = createFileRoute("/harmonium-songs")({
 
 function HarmoniumSongsPage() {
   const songs = [
-    { title: "Hanuman Chalisa", difficulty: "Beginner", type: "Bhajan", notes: "Based on Raag Bhupali, uses only 5 notes" },
-    { title: "Om Jai Jagdish Hare", difficulty: "Beginner", type: "Aarti", notes: "Simple Aaroh-Avroh pattern" },
-    { title: "Raga Bhupali", difficulty: "Beginner", type: "Raga", notes: "Pentatonic scale: Sa Re Ga Pa Dha" },
-    { title: "Raga Yaman", difficulty: "Beginner", type: "Raga", notes: "Seven notes with tivra Ma" },
-    { title: "Raga Brindavani Sarang", difficulty: "Intermediate", type: "Raga", notes: "Uses Komal Ni, beautiful for bhajans" },
-    { title: "Raga Bhairavi", difficulty: "Advanced", type: "Raga", notes: "Morning raga with all komal notes except Sa and Pa" },
-    { title: "Krishna Nee Begane", difficulty: "Intermediate", type: "Varnam", notes: "Classical varnam in Yamunakalyani" },
-    { title: "Gayatri Mantra", difficulty: "Beginner", type: "Mantra", notes: "Simple repetitive pattern" },
+    { title: "Raga Bhupali", difficulty: "Beginner", type: "Raga", notes: "Audav (5-note) raga. Aaroh: S R G P D S. Avroh: S D P G R S. Omits Ma and Ni. Thaat: Kalyan. A great first raga to learn." },
+    { title: "Raga Yaman", difficulty: "Beginner", type: "Raga", notes: "Seven notes with tivra Ma. Aaroh: N R G M' D N S. Avroh: S N D M' G R S. Thaat: Kalyan. An evening raga and a common introduction to tivra Ma." },
+    { title: "Raga Brindavani Sarang", difficulty: "Intermediate", type: "Raga", notes: "Uses komal Ni. Aaroh: S R M P N S. Avroh: S N P M G R S. Thaat: Kafi. Popular for bhajans and short classical pieces." },
+    { title: "Raga Bhairavi", difficulty: "Advanced", type: "Raga", notes: "All four variable notes are komal (Re, Ga, Dha, Ni); Sa and Pa stay shuddha. Thaat: Bhairavi. Traditionally associated with morning, though often performed as a concluding raga." },
+    { title: "Raga Durga", difficulty: "Beginner", type: "Raga", notes: "Audav raga. Aaroh: S R M P D S. Avroh: S D P M R S. Omits Ga and Ni. Thaat: Bilaval. A gentle, approachable pentatonic raga." },
+    { title: "Raga Asavari", difficulty: "Intermediate", type: "Raga", notes: "Komal Ga, Dha, Ni. Aaroh: S R G M P D N S. Avroh: S n D P M g R S. Thaat: Asavari. A morning raga with a plaintive, descending character." },
+    { title: "Om Jai Jagdish Hare", difficulty: "Beginner", type: "Aarti", notes: "A traditional aarti with a simple, repetitive melodic pattern — well suited to beginners learning to accompany group singing." },
+    { title: "Gayatri Mantra", difficulty: "Beginner", type: "Mantra", notes: "A short, repetitive chant pattern. Good for practicing steady tempo and even note duration." },
   ];
 
   return (
@@ -79,8 +79,10 @@ function HarmoniumSongsPage() {
               Songs provide context for the notes you're learning and make practice sessions more enjoyable.
             </p>
             <p>
-              For <strong>beginners</strong>, we recommend starting with simple bhajans like "Hanuman Chalisa" or "Om Jai Jagdish Hare."
-              These songs use repetitive patterns that are easy to memorize.
+              For <strong>beginners</strong>, we recommend starting with simple pieces like <em>Om Jai Jagdish Hare</em> or
+              <em> Raga Bhupali</em>. These use repetitive or pentatonic patterns that are easy to memorize. Once you're
+              comfortable, the <Link to="/learn" className="text-gold-soft hover:underline">harmonium lessons</Link> page
+              walks you through sargam, alankars, and thaats that support every song here.
             </p>
           </div>
         </section>
@@ -136,13 +138,33 @@ function HarmoniumSongsPage() {
         <section className="text-center">
           <h2 className="text-3xl font-display mb-4">Start Practicing Songs</h2>
           <p className="text-muted-foreground mb-6">
-            The best way to <strong>learn harmonium songs</strong> is by playing. Use our free virtual harmonium.
+            The best way to <strong>learn harmonium songs</strong> is by playing. Use our free virtual harmonium,
+            and review the <Link to="/harmonium-notes" className="text-gold-soft hover:underline">harmonium notes</Link> guide
+            if you need a refresher on Sa Re Ga Ma.
           </p>
-          <Link to="/play" className="btn-gold btn-gold-hover px-6 py-3 rounded-full font-medium inline-flex items-center gap-2">
-            <Music className="h-4 w-4" /> Open Harmonium
-          </Link>
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            <Link to="/play" className="btn-gold btn-gold-hover px-6 py-3 rounded-full font-medium inline-flex items-center gap-2">
+              <Music className="h-4 w-4" /> Open Harmonium
+            </Link>
+            <Link to="/learn" className="btn-ghost-gold px-6 py-3 rounded-full font-medium inline-flex items-center gap-2">
+              Harmonium Lessons
+            </Link>
+          </div>
         </section>
       </main>
+
+      <footer className="border-t border-white/5 py-8 mt-8">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
+          <div>© {new Date().getFullYear()} Online Harmonium - Riyaz</div>
+          <div className="flex gap-4 flex-wrap justify-center">
+            <Link to="/" className="hover:text-foreground">Home</Link>
+            <Link to="/play" className="hover:text-foreground">Play</Link>
+            <Link to="/learn" className="hover:text-foreground">Learn</Link>
+            <Link to="/harmonium-notes" className="hover:text-foreground">Notes</Link>
+            <Link to="/how-to-play-harmonium" className="hover:text-foreground">How to Play</Link>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }

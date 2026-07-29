@@ -102,13 +102,7 @@ function LearnPage() {
   );
 }
 
-const learnHtml = `<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="format-detection" content="telephone=no">
-<style>
+const learnHtml = `<style>
   :root{
     --bg: #160f09;
     --bg-panel: #1f160d;
@@ -363,8 +357,6 @@ const learnHtml = `<!DOCTYPE html>
     .sargam-cell:last-child{ grid-column: span 4; }
   }
 </style>
-</head>
-<body>
 <a class="skip-link" href="#main">Skip to content</a>
 <header class="site">
   <div class="nav">
@@ -440,15 +432,15 @@ const learnHtml = `<!DOCTYPE html>
         <p>Indian classical music is taught by ear using sargam syllables instead of staff notation. Learn to sing these before you play them — the ear leads the hand, not the other way round.</p>
       </div>
       <div class="sargam-grid">
-        <div class="sargam-cell"><div class="sw">Sa</div><div class="full">Shadja</div><div class="western">≈ C</div></div>
-        <div class="sargam-cell"><div class="sw">Re</div><div class="full">Rishabh</div><div class="western">≈ D</div></div>
-        <div class="sargam-cell"><div class="sw">Ga</div><div class="full">Gandhar</div><div class="western">≈ E</div></div>
-        <div class="sargam-cell"><div class="sw">Ma</div><div class="full">Madhyam</div><div class="western">≈ F</div></div>
-        <div class="sargam-cell"><div class="sw">Pa</div><div class="full">Pancham</div><div class="western">≈ G</div></div>
-        <div class="sargam-cell"><div class="sw">Dha</div><div class="full">Dhaivat</div><div class="western">≈ A</div></div>
-        <div class="sargam-cell"><div class="sw">Ni</div><div class="full">Nishad</div><div class="western">≈ B</div></div>
+        <div class="sargam-cell"><div class="sw">Sa</div><div class="full">Shadja</div><div class="western">C (when Sa=C)</div></div>
+        <div class="sargam-cell"><div class="sw">Re</div><div class="full">Rishabh</div><div class="western">D (when Sa=C)</div></div>
+        <div class="sargam-cell"><div class="sw">Ga</div><div class="full">Gandhar</div><div class="western">E (when Sa=C)</div></div>
+        <div class="sargam-cell"><div class="sw">Ma</div><div class="full">Madhyam</div><div class="western">F (when Sa=C)</div></div>
+        <div class="sargam-cell"><div class="sw">Pa</div><div class="full">Pancham</div><div class="western">G (when Sa=C)</div></div>
+        <div class="sargam-cell"><div class="sw">Dha</div><div class="full">Dhaivat</div><div class="western">A (when Sa=C)</div></div>
+        <div class="sargam-cell"><div class="sw">Ni</div><div class="full">Nishad</div><div class="western">B (when Sa=C)</div></div>
       </div>
-      <p style="color:var(--ink-faint); font-size:.85rem; margin-top:16px;">Sa and Pa are fixed (achal); the other five can be shifted flat (komal) or, for Ma, sharp (tivra) depending on the raag. Riyaz shows both sargam and western labels on every key so you can cross-reference as you learn.</p>
+      <p style="color:var(--ink-faint); font-size:.85rem; margin-top:16px;"><strong>Sa is the tonic</strong> — the reference pitch everything else is measured from — so it is not fixed to C. The Western letters above apply when Sa = C; if you choose a different tonic (using the scale changer on the harmonium), every Western note shifts accordingly. Sa and Pa are fixed (achal); the other five can be shifted flat (komal) or, for Ma, sharp (tivra) depending on the raag. Riyaz shows both sargam and western labels on every key so you can cross-reference as you learn.</p>
     </section>
     <section id="levels" aria-labelledby="levels-heading">
       <div class="section-head">
@@ -746,8 +738,11 @@ const learnHtml = `<!DOCTYPE html>
     <section style="border-bottom:none; padding-bottom: 88px;">
       <div class="final-cta">
         <h2>Put it into practice</h2>
-        <p>Everything above works on the keyboard right now — sargam labels included on every key.</p>
-        <a class="cta" href="/play">Open the harmonium →</a>
+        <p>Everything above works on the keyboard right now — sargam labels included on every key. Try the interactive practice exercises for guided, step-by-step feedback.</p>
+        <div style="display:flex; gap:14px; justify-content:center; flex-wrap:wrap; margin-top:8px;">
+          <a class="cta" href="/play">Open the harmonium →</a>
+          <a class="btn-outline" href="/practice">Practice exercises →</a>
+        </div>
       </div>
     </section>
   </div>
@@ -756,11 +751,10 @@ const learnHtml = `<!DOCTYPE html>
   <div class="wrap foot-row">
     <p>© 2026 Riyaz. Crafted for musicians.</p>
     <nav class="foot-links" aria-label="Footer">
-      <a href="/play">Play</a>
-      <a href="/#features">Features</a>
-      <a href="/learn">Learn</a>
+      <a href="/play">Play Harmonium</a>
+      <a href="/harmonium-notes">Harmonium Notes</a>
+      <a href="/harmonium-songs">Harmonium Songs</a>
+      <a href="/how-to-play-harmonium">How to Play</a>
     </nav>
   </div>
-</footer>
-</body>
-</html>`;
+</footer>`;

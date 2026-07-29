@@ -83,17 +83,23 @@ function HarmoniumNotesPage() {
             Our virtual harmonium makes it easy to practice these notes online.
           </p>
 
-          <div className="glass rounded-2xl p-6 sm:p-8 mb-8">
+          <div className="glass rounded-2xl p-6 sm:p-8 mb-6">
             <h3 className="font-display text-2xl mb-4">The Seven Notes (Saptak)</h3>
+            <p className="text-sm text-muted-foreground mb-4">
+              In Indian classical music, <strong>Sa</strong> is the <em>tonic</em> — the reference pitch
+              everything else is built from. Sa is not fixed to any particular Western note. If you set
+              Sa = C, the mapping below applies. But if you choose a different tonic (using the scale
+              changer on the harmonium), every Western note shifts accordingly.
+            </p>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {[
-                { sargam: "Sa (S)", western: "C (Do)", desc: "The tonic note. The starting point of all ragas." },
-                { sargam: "Re (R)", western: "D (Re)", desc: "The second note, whole step above Sa." },
-                { sargam: "Ga (G)", western: "E (Mi)", desc: "The third note, another whole step up." },
-                { sargam: "Ma (M)", western: "F (Fa)", desc: "The fourth note, half step above Ga." },
-                { sargam: "Pa (P)", western: "G (Sol)", desc: "The fifth note, whole step above Ma." },
-                { sargam: "Dha (D)", western: "A (La)", desc: "The sixth note, whole step above Pa." },
-                { sargam: "Ni (N)", western: "B (Ti)", desc: "The seventh note, whole step above Dha." },
+                { sargam: "Sa (S)", western: "C (Do) — when Sa = C", desc: "The tonic note. The starting point of all ragas. Sa is always shuddha (natural)." },
+                { sargam: "Re (R)", western: "D (Re) — when Sa = C", desc: "The second note. Can be shuddha (natural) or komal (flat) depending on the raga." },
+                { sargam: "Ga (G)", western: "E (Mi) — when Sa = C", desc: "The third note. Can be shuddha (natural) or komal (flat) depending on the raga." },
+                { sargam: "Ma (M)", western: "F (Fa) — when Sa = C", desc: "The fourth note. Can be shuddha (natural) or tivra (sharp) depending on the raga." },
+                { sargam: "Pa (P)", western: "G (Sol) — when Sa = C", desc: "The fifth note. Pa is always shuddha (natural), like Sa." },
+                { sargam: "Dha (D)", western: "A (La) — when Sa = C", desc: "The sixth note. Can be shuddha (natural) or komal (flat) depending on the raga." },
+                { sargam: "Ni (N)", western: "B (Ti) — when Sa = C", desc: "The seventh note. Can be shuddha (natural) or komal (flat) depending on the raga." },
               ].map((note) => (
                 <div key={note.sargam} className="p-4 rounded-xl bg-white/5 border border-white/10">
                   <div className="font-display text-lg text-gold-soft">{note.sargam}</div>
@@ -102,6 +108,22 @@ function HarmoniumNotesPage() {
                 </div>
               ))}
             </div>
+          </div>
+
+          <div className="glass rounded-2xl p-6 mb-8">
+            <h3 className="font-display text-xl mb-3">Shuddha, Komal, and Tivra Notes</h3>
+            <p className="text-sm text-muted-foreground mb-3">
+              Each swara (except Sa and Pa) has two forms:
+            </p>
+            <ul className="space-y-2 text-sm text-muted-foreground">
+              <li><strong className="text-gold-soft">Shuddha</strong> — the natural position of the note.</li>
+              <li><strong className="text-gold-soft">Komal</strong> — the note is flattened (lowered a semitone). Applies to Re, Ga, Dha, and Ni.</li>
+              <li><strong className="text-gold-soft">Tivra</strong> — the note is sharpened (raised a semitone). Applies only to Ma.</li>
+            </ul>
+            <p className="text-sm text-muted-foreground mt-3">
+              Sa and Pa are <em>achal</em> (immovable) — they are always shuddha and never komal or tivra.
+              This gives 12 total pitch positions across the seven swaras, matching the 12 semitones in a Western octave.
+            </p>
           </div>
         </section>
 
@@ -162,13 +184,15 @@ function HarmoniumNotesPage() {
           </p>
           <div className="glass rounded-2xl p-6">
             <ul className="space-y-3 text-sm text-muted-foreground">
-              <li><strong>Bhairav:</strong> Sa Re Ga Ma Pa Dha Ni Sa (with komal Ga and Dha)</li>
-              <li><strong>Yaman:</strong> Sa Re Ga Ma# Pa Dha Ni Sa (with tivra Ma)</li>
-              <li><strong>Bhairavi:</strong> Sa Re komal Ga Ma Pa Dha komal Ni Sa</li>
-              <li><strong>Bhoop:</strong> Sa Re Ga Pa Dha Sa (pentatonic)</li>
+              <li><strong>Bilaval:</strong> Sa Re Ga Ma Pa Dha Ni Sa — all seven natural (shuddha) notes. The equivalent of a Western major scale.</li>
+              <li><strong>Bhairav:</strong> Sa <em>komal Re</em> Ga Ma Pa <em>komal Dha</em> Ni Sa — komal Re and komal Dha give it its grave, devotional character.</li>
+              <li><strong>Yaman:</strong> Sa Re Ga <em>tivra Ma</em> Pa Dha Ni Sa — uses a sharpened (tivra) Ma. An evening raga and a common first step into intermediate playing.</li>
+              <li><strong>Bhairavi:</strong> Sa <em>komal Re</em> <em>komal Ga</em> Ma Pa <em>komal Dha</em> <em>komal Ni</em> Sa — all four variable notes are komal (Sa and Pa stay shuddha).</li>
+              <li><strong>Bhoopali (Bhoop):</strong> Sa Re Ga Pa Dha Sa — a five-note (audav) raga; omits Ma and Ni.</li>
             </ul>
             <p className="mt-4 text-sm">
-              Practice these patterns on our <Link to="/play" className="text-gold-soft hover:underline">online harmonium keyboard</Link>.
+              Practice these patterns on our <Link to="/play" className="text-gold-soft hover:underline">online harmonium keyboard</Link>,
+              or explore the full <Link to="/learn" className="text-gold-soft hover:underline">harmonium lessons</Link> for thaats and alankars.
             </p>
           </div>
         </section>
@@ -179,11 +203,29 @@ function HarmoniumNotesPage() {
             The best way to learn harmonium notes is by playing. Use our free virtual harmonium to practice
             Sa Re Ga Ma, learn ragas, and develop your skills.
           </p>
-          <Link to="/play" className="btn-gold btn-gold-hover px-6 py-3 rounded-full font-medium inline-flex items-center gap-2">
-            <Music className="h-4 w-4" /> Open Harmonium
-          </Link>
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            <Link to="/play" className="btn-gold btn-gold-hover px-6 py-3 rounded-full font-medium inline-flex items-center gap-2">
+              <Music className="h-4 w-4" /> Open Harmonium
+            </Link>
+            <Link to="/learn" className="btn-ghost-gold px-6 py-3 rounded-full font-medium inline-flex items-center gap-2">
+              Harmonium Lessons
+            </Link>
+          </div>
         </section>
       </main>
+
+      <footer className="border-t border-white/5 py-8 mt-8">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
+          <div>© {new Date().getFullYear()} Online Harmonium - Riyaz</div>
+          <div className="flex gap-4 flex-wrap justify-center">
+            <Link to="/" className="hover:text-foreground">Home</Link>
+            <Link to="/play" className="hover:text-foreground">Play</Link>
+            <Link to="/learn" className="hover:text-foreground">Learn</Link>
+            <Link to="/harmonium-songs" className="hover:text-foreground">Songs</Link>
+            <Link to="/how-to-play-harmonium" className="hover:text-foreground">How to Play</Link>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }

@@ -1,34 +1,38 @@
 import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
 
-// TODO: replace with your project URL once a project name or custom domain is set.
-const BASE_URL = "";
+// Production site URL. Used for absolute <loc> entries in the sitemap.
+const BASE_URL = "https://onlineharmonium.vercel.app";
 
 interface SitemapEntry {
   path: string;
   changefreq?: "always" | "hourly" | "daily" | "weekly" | "monthly" | "yearly" | "never";
   priority?: string;
+  lastmod?: string;
 }
 
 export const Route = createFileRoute("/sitemap.xml")({
   server: {
     handlers: {
       GET: async () => {
+        const today = new Date().toISOString().split("T")[0];
         const entries: SitemapEntry[] = [
-          { path: "/", changefreq: "weekly", priority: "1.0" },
-          { path: "/play", changefreq: "weekly", priority: "0.9" },
-          { path: "/learn", changefreq: "weekly", priority: "0.9" },
-          { path: "/play-harmonium-online", changefreq: "weekly", priority: "0.9" },
-          { path: "/harmonium-notes", changefreq: "weekly", priority: "0.8" },
-          { path: "/how-to-play-harmonium", changefreq: "weekly", priority: "0.8" },
-          { path: "/harmonium-songs", changefreq: "weekly", priority: "0.8" },
-          { path: "/virtual-harmonium", changefreq: "weekly", priority: "0.8" },
+          { path: "/", changefreq: "weekly", priority: "1.0", lastmod: today },
+          { path: "/play", changefreq: "weekly", priority: "0.9", lastmod: today },
+          { path: "/learn", changefreq: "weekly", priority: "0.9", lastmod: today },
+          { path: "/practice", changefreq: "weekly", priority: "0.8", lastmod: today },
+          { path: "/play-harmonium-online", changefreq: "weekly", priority: "0.8", lastmod: today },
+          { path: "/harmonium-notes", changefreq: "weekly", priority: "0.8", lastmod: today },
+          { path: "/how-to-play-harmonium", changefreq: "weekly", priority: "0.8", lastmod: today },
+          { path: "/harmonium-songs", changefreq: "weekly", priority: "0.8", lastmod: today },
+          { path: "/virtual-harmonium", changefreq: "monthly", priority: "0.7", lastmod: today },
         ];
 
         const urls = entries.map((e) =>
           [
             `  <url>`,
             `    <loc>${BASE_URL}${e.path}</loc>`,
+            e.lastmod ? `    <lastmod>${e.lastmod}</lastmod>` : null,
             e.changefreq ? `    <changefreq>${e.changefreq}</changefreq>` : null,
             e.priority ? `    <priority>${e.priority}</priority>` : null,
             `  </url>`,

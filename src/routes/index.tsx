@@ -39,22 +39,6 @@ export const Route = createFileRoute("/")({
               name: "Online Harmonium - Riyaz",
               url: "https://onlineharmonium.vercel.app/",
               description: "Free online virtual harmonium with realistic sampled reeds and sargam labels.",
-              potentialAction: {
-                "@type": "SearchAction",
-                target: "https://onlineharmonium.vercel.app/search?q={search_term_string}",
-                "query-input": "required name=search_term_string",
-              },
-            },
-            {
-              "@type": "Organization",
-              name: "Riyaz",
-              url: "https://onlineharmonium.vercel.app/",
-              logo: "https://onlineharmonium.vercel.app/logo.png",
-              sameAs: [
-                "https://twitter.com/riyazapp",
-                "https://www.youtube.com/@riyazapp",
-                "https://www.instagram.com/riyazapp/",
-              ],
             },
             {
               "@type": "WebApplication",
@@ -64,10 +48,9 @@ export const Route = createFileRoute("/")({
               url: "https://onlineharmonium.vercel.app/",
               description: "Free online harmonium with realistic sampled reeds and sargam labels. Play Indian classical music, practice Sa Re Ga Ma, and learn harmonium songs.",
               offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
-              aggregateRating: { "@type": "AggregateRating", ratingValue: "4.9", ratingCount: "128" },
               browserRequirements: "Requires JavaScript. Requires HTML5.",
               softwareVersion: "1.0.0",
-              releaseNotes: "Initial release with 27-key scale-changer harmonium, sargam labels, and MIDI support.",
+              releaseNotes: "27-key scale-changer harmonium, sargam labels, and MIDI support.",
             },
             {
               "@type": "FAQPage",
@@ -75,15 +58,10 @@ export const Route = createFileRoute("/")({
                 { "@type": "Question", name: "What is an online harmonium?", acceptedAnswer: { "@type": "Answer", text: "An online harmonium is a virtual/web-based version of the traditional Indian harmonium. It allows you to play harmonium directly in your browser without downloading any software. You can use your mouse, touch screen, or computer keyboard to play notes." } },
                 { "@type": "Question", name: "Can I play harmonium online for free?", acceptedAnswer: { "@type": "Answer", text: "Yes! Our online harmonium is completely free to use. No downloads, no sign-ups, no hidden fees. Just open the website and start playing harmonium instantly in your browser." } },
                 { "@type": "Question", name: "Can beginners learn harmonium using this website?", acceptedAnswer: { "@type": "Answer", text: "Absolutely! Our virtual harmonium is perfect for beginners. It features sargam labels (Sa Re Ga Ma), western note labels, keyboard mappings, and practice modes to help you learn harmonium step by step." } },
-                { "@type": "Question", name: "What are Sa Re Ga Ma notes?", acceptedAnswer: { "@type": "Answer", text: "Sa Re Ga Ma are the seven basic notes (swaras) in Indian classical music, equivalent to Do Re Mi Fa So La Ti in Western music. On our online harmonium, these are labeled on the keys to help you learn and practice Indian classical music." } },
+                { "@type": "Question", name: "What are Sa Re Ga Ma notes?", acceptedAnswer: { "@type": "Answer", text: "Sa Re Ga Ma are the seven basic notes (swaras) in Indian classical music. Sa is the tonic — the reference pitch everything else is measured from — so its Western letter depends on the key you choose. When Sa = C, the notes map to C, D, E, F, G, A, B. On our online harmonium, these are labeled on the keys to help you learn and practice Indian classical music." } },
                 { "@type": "Question", name: "Does this work on mobile?", acceptedAnswer: { "@type": "Answer", text: "Yes! Our virtual harmonium works perfectly on mobile phones, tablets, and desktops. The touch interface is optimized for mobile devices, so you can practice harmonium anywhere, anytime." } },
+                { "@type": "Question", name: "Is there a way to practice harmonium songs?", acceptedAnswer: { "@type": "Answer", text: "Yes. Our harmonium songs page lists beginner-friendly ragas, bhajans, and aartis with difficulty levels and note guidance, and you can play each one directly on the virtual harmonium. Start with simple pieces like Om Jai Jagdish Hare or Raga Bhupali, then progress to more complex ragas as your technique grows." } },
               ],
-            },
-            {
-              "@type": "MusicInstrument",
-              name: "Virtual Harmonium",
-              description: "Digital/online version of the Indian harmonium with realistic sampled reed sounds",
-              musicalInstrumentType: "Organ",
             },
           ],
         }),
@@ -376,17 +354,24 @@ function HarmoniumNotes() {
           The seven basic notes, known as <strong>Sa Re Ga Ma</strong> (Sargam), form the foundation of melody.
         </p>
 
-        <div className="glass rounded-2xl p-6 sm:p-8 mb-8">
+        <div className="glass rounded-2xl p-6 sm:p-8 mb-6">
           <h3 className="font-display text-2xl mb-4">The Seven Notes (Saptak)</h3>
+          <p className="text-sm text-muted-foreground mb-4">
+            In Indian classical music, <strong>Sa</strong> is the <em>tonic</em> — the reference pitch
+            everything else is measured from. Sa is not fixed to any particular Western note. The mapping
+            below shows the notes when Sa = C; if you choose a different tonic, every Western note shifts
+            accordingly. Sa and Pa are always natural (achal); the other five can be komal (flat) or, for
+            Ma, tivra (sharp) depending on the raga.
+          </p>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {[
-              { sargam: "Sa (S)", western: "C (Do)", desc: "The tonic note. The starting point of all ragas." },
-              { sargam: "Re (R)", western: "D (Re)", desc: "The second note, whole step above Sa." },
-              { sargam: "Ga (G)", western: "E (Mi)", desc: "The third note, another whole step up." },
-              { sargam: "Ma (M)", western: "F (Fa)", desc: "The fourth note, half step above Ga." },
-              { sargam: "Pa (P)", western: "G (Sol)", desc: "The fifth note, whole step above Ma." },
-              { sargam: "Dha (D)", western: "A (La)", desc: "The sixth note, whole step above Pa." },
-              { sargam: "Ni (N)", western: "B (Ti)", desc: "The seventh note, whole step above Dha." },
+              { sargam: "Sa (S)", western: "C (Do) — when Sa = C", desc: "The tonic note. The starting point of all ragas. Always shuddha (natural)." },
+              { sargam: "Re (R)", western: "D (Re) — when Sa = C", desc: "The second note. Shuddha or komal (flat) depending on the raga." },
+              { sargam: "Ga (G)", western: "E (Mi) — when Sa = C", desc: "The third note. Shuddha or komal (flat) depending on the raga." },
+              { sargam: "Ma (M)", western: "F (Fa) — when Sa = C", desc: "The fourth note. Shuddha or tivra (sharp) depending on the raga." },
+              { sargam: "Pa (P)", western: "G (Sol) — when Sa = C", desc: "The fifth note. Always shuddha (natural), like Sa." },
+              { sargam: "Dha (D)", western: "A (La) — when Sa = C", desc: "The sixth note. Shuddha or komal (flat) depending on the raga." },
+              { sargam: "Ni (N)", western: "B (Ti) — when Sa = C", desc: "The seventh note. Shuddha or komal (flat) depending on the raga." },
             ].map((note) => (
               <div key={note.sargam} className="p-4 rounded-xl bg-white/5 border border-white/10">
                 <div className="font-display text-lg text-gold-soft">{note.sargam}</div>
@@ -483,7 +468,7 @@ function FAQ() {
     },
     {
       q: "What are Sa Re Ga Ma notes?",
-      a: "Sa Re Ga Ma are the seven basic notes (swaras) in Indian classical music. Sa (C/Do), Re (D/Re), Ga (E/Mi), Ma (F/Fa), Pa (G/Sol), Dha (A/La), Ni (B/Ti). These notes form the foundation of all ragas and melodies. On our harmonium, they're clearly labeled to help you learn and practice."
+      a: "Sa Re Ga Ma are the seven basic notes (swaras) in Indian classical music. Sa is the tonic — the reference pitch everything else is measured from — so its Western letter depends on the key you choose. When Sa = C, the notes map to C, D, E, F, G, A, B. Sa and Pa are always natural (achal); Re, Ga, Dha, and Ni can be komal (flat), and Ma can be tivra (sharp), depending on the raga. On our harmonium, all swaras are clearly labeled to help you learn and practice."
     },
     {
       q: "Does this work on mobile?",
@@ -491,7 +476,7 @@ function FAQ() {
     },
     {
       q: "Is there a way to practice harmonium songs?",
-      a: "Yes, you can practice hundreds of harmonium songs including traditional ragas, bhajans, and aartis. Our website provides note references and guidance for popular pieces. You can start with beginner-friendly songs like Hanuman Chalisa and Om Jai Jagdish Hare, then progress to more complex ragas."
+      a: "Yes. Our harmonium songs page lists beginner-friendly ragas, bhajans, and aartis with difficulty levels and note guidance, and you can play each one directly on the virtual harmonium. Start with simple pieces like Om Jai Jagdish Hare or Raga Bhupali, then progress to more complex ragas as your technique grows."
     },
   ];
 

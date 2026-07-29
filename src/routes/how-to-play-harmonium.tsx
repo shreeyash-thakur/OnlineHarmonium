@@ -219,13 +219,32 @@ function HowToPlayPage() {
           <h2 className="text-3xl font-display mb-4">Ready to Start Learning?</h2>
           <p className="text-muted-foreground mb-6">
             Now that you know <strong>how to play harmonium online</strong>, it's time to practice.
-            Our free virtual harmonium is the perfect tool for beginners.
+            Our free virtual harmonium is the perfect tool for beginners. For a structured path through
+            sargam, alankars, and ragas, visit our <Link to="/learn" className="text-gold-soft hover:underline">harmonium lessons</Link>.
           </p>
-          <Link to="/play" className="btn-gold btn-gold-hover px-6 py-3 rounded-full font-medium inline-flex items-center gap-2">
-            <BookOpen className="h-4 w-4" /> Start Practicing
-          </Link>
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            <Link to="/play" className="btn-gold btn-gold-hover px-6 py-3 rounded-full font-medium inline-flex items-center gap-2">
+              <BookOpen className="h-4 w-4" /> Start Practicing
+            </Link>
+            <Link to="/learn" className="btn-ghost-gold px-6 py-3 rounded-full font-medium inline-flex items-center gap-2">
+              Learn Harmonium
+            </Link>
+          </div>
         </section>
       </main>
+
+      <footer className="border-t border-white/5 py-8 mt-8">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
+          <div>© {new Date().getFullYear()} Online Harmonium - Riyaz</div>
+          <div className="flex gap-4 flex-wrap justify-center">
+            <Link to="/" className="hover:text-foreground">Home</Link>
+            <Link to="/play" className="hover:text-foreground">Play</Link>
+            <Link to="/learn" className="hover:text-foreground">Learn</Link>
+            <Link to="/harmonium-notes" className="hover:text-foreground">Notes</Link>
+            <Link to="/harmonium-songs" className="hover:text-foreground">Songs</Link>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }

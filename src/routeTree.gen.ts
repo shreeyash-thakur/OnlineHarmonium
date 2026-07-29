@@ -16,6 +16,7 @@ import { Route as HowToPlayHarmoniumRouteImport } from './routes/how-to-play-har
 import { Route as LearnRouteImport } from './routes/learn'
 import { Route as PlayRouteImport } from './routes/play'
 import { Route as PlayHarmoniumOnlineRouteImport } from './routes/play-harmonium-online'
+import { Route as PracticeRouteImport } from './routes/practice'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as VirtualHarmoniumRouteImport } from './routes/virtual-harmonium'
 
@@ -54,6 +55,11 @@ const PlayHarmoniumOnlineRoute = PlayHarmoniumOnlineRouteImport.update({
   path: '/play-harmonium-online',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PracticeRoute = PracticeRouteImport.update({
+  id: '/practice',
+  path: '/practice',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
@@ -73,6 +79,7 @@ export interface FileRoutesByFullPath {
   '/learn': typeof LearnRoute
   '/play': typeof PlayRoute
   '/play-harmonium-online': typeof PlayHarmoniumOnlineRoute
+  '/practice': typeof PracticeRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/virtual-harmonium': typeof VirtualHarmoniumRoute
 }
@@ -84,6 +91,7 @@ export interface FileRoutesByTo {
   '/learn': typeof LearnRoute
   '/play': typeof PlayRoute
   '/play-harmonium-online': typeof PlayHarmoniumOnlineRoute
+  '/practice': typeof PracticeRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/virtual-harmonium': typeof VirtualHarmoniumRoute
 }
@@ -96,6 +104,7 @@ export interface FileRoutesById {
   '/learn': typeof LearnRoute
   '/play': typeof PlayRoute
   '/play-harmonium-online': typeof PlayHarmoniumOnlineRoute
+  '/practice': typeof PracticeRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/virtual-harmonium': typeof VirtualHarmoniumRoute
 }
@@ -109,6 +118,7 @@ export interface FileRouteTypes {
     | '/learn'
     | '/play'
     | '/play-harmonium-online'
+    | '/practice'
     | '/sitemap.xml'
     | '/virtual-harmonium'
   fileRoutesByTo: FileRoutesByTo
@@ -120,6 +130,7 @@ export interface FileRouteTypes {
     | '/learn'
     | '/play'
     | '/play-harmonium-online'
+    | '/practice'
     | '/sitemap.xml'
     | '/virtual-harmonium'
   id:
@@ -131,6 +142,7 @@ export interface FileRouteTypes {
     | '/learn'
     | '/play'
     | '/play-harmonium-online'
+    | '/practice'
     | '/sitemap.xml'
     | '/virtual-harmonium'
   fileRoutesById: FileRoutesById
@@ -143,6 +155,7 @@ export interface RootRouteChildren {
   LearnRoute: typeof LearnRoute
   PlayRoute: typeof PlayRoute
   PlayHarmoniumOnlineRoute: typeof PlayHarmoniumOnlineRoute
+  PracticeRoute: typeof PracticeRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   VirtualHarmoniumRoute: typeof VirtualHarmoniumRoute
 }
@@ -198,6 +211,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PlayHarmoniumOnlineRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/practice': {
+      id: '/practice'
+      path: '/practice'
+      fullPath: '/practice'
+      preLoaderRoute: typeof PracticeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/sitemap.xml': {
       id: '/sitemap.xml'
       path: '/sitemap.xml'
@@ -223,6 +243,7 @@ const rootRouteChildren: RootRouteChildren = {
   LearnRoute: LearnRoute,
   PlayRoute: PlayRoute,
   PlayHarmoniumOnlineRoute: PlayHarmoniumOnlineRoute,
+  PracticeRoute: PracticeRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   VirtualHarmoniumRoute: VirtualHarmoniumRoute,
 }
