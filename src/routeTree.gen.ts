@@ -10,12 +10,38 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as HarmoniumNotesRouteImport } from './routes/harmonium-notes'
+import { Route as HarmoniumSongsRouteImport } from './routes/harmonium-songs'
+import { Route as HowToPlayHarmoniumRouteImport } from './routes/how-to-play-harmonium'
+import { Route as LearnRouteImport } from './routes/learn'
 import { Route as PlayRouteImport } from './routes/play'
+import { Route as PlayHarmoniumOnlineRouteImport } from './routes/play-harmonium-online'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as VirtualHarmoniumRouteImport } from './routes/virtual-harmonium'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HarmoniumNotesRoute = HarmoniumNotesRouteImport.update({
+  id: '/harmonium-notes',
+  path: '/harmonium-notes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HarmoniumSongsRoute = HarmoniumSongsRouteImport.update({
+  id: '/harmonium-songs',
+  path: '/harmonium-songs',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HowToPlayHarmoniumRoute = HowToPlayHarmoniumRouteImport.update({
+  id: '/how-to-play-harmonium',
+  path: '/how-to-play-harmonium',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LearnRoute = LearnRouteImport.update({
+  id: '/learn',
+  path: '/learn',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PlayRoute = PlayRouteImport.update({
@@ -23,40 +49,102 @@ const PlayRoute = PlayRouteImport.update({
   path: '/play',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PlayHarmoniumOnlineRoute = PlayHarmoniumOnlineRouteImport.update({
+  id: '/play-harmonium-online',
+  path: '/play-harmonium-online',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
+const VirtualHarmoniumRoute = VirtualHarmoniumRouteImport.update({
+  id: '/virtual-harmonium',
+  path: '/virtual-harmonium',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/harmonium-notes': typeof HarmoniumNotesRoute
+  '/harmonium-songs': typeof HarmoniumSongsRoute
+  '/how-to-play-harmonium': typeof HowToPlayHarmoniumRoute
+  '/learn': typeof LearnRoute
   '/play': typeof PlayRoute
+  '/play-harmonium-online': typeof PlayHarmoniumOnlineRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/virtual-harmonium': typeof VirtualHarmoniumRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/harmonium-notes': typeof HarmoniumNotesRoute
+  '/harmonium-songs': typeof HarmoniumSongsRoute
+  '/how-to-play-harmonium': typeof HowToPlayHarmoniumRoute
+  '/learn': typeof LearnRoute
   '/play': typeof PlayRoute
+  '/play-harmonium-online': typeof PlayHarmoniumOnlineRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/virtual-harmonium': typeof VirtualHarmoniumRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/harmonium-notes': typeof HarmoniumNotesRoute
+  '/harmonium-songs': typeof HarmoniumSongsRoute
+  '/how-to-play-harmonium': typeof HowToPlayHarmoniumRoute
+  '/learn': typeof LearnRoute
   '/play': typeof PlayRoute
+  '/play-harmonium-online': typeof PlayHarmoniumOnlineRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/virtual-harmonium': typeof VirtualHarmoniumRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/play' | '/sitemap.xml'
+  fullPaths:
+    | '/'
+    | '/harmonium-notes'
+    | '/harmonium-songs'
+    | '/how-to-play-harmonium'
+    | '/learn'
+    | '/play'
+    | '/play-harmonium-online'
+    | '/sitemap.xml'
+    | '/virtual-harmonium'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/play' | '/sitemap.xml'
-  id: '__root__' | '/' | '/play' | '/sitemap.xml'
+  to:
+    | '/'
+    | '/harmonium-notes'
+    | '/harmonium-songs'
+    | '/how-to-play-harmonium'
+    | '/learn'
+    | '/play'
+    | '/play-harmonium-online'
+    | '/sitemap.xml'
+    | '/virtual-harmonium'
+  id:
+    | '__root__'
+    | '/'
+    | '/harmonium-notes'
+    | '/harmonium-songs'
+    | '/how-to-play-harmonium'
+    | '/learn'
+    | '/play'
+    | '/play-harmonium-online'
+    | '/sitemap.xml'
+    | '/virtual-harmonium'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  HarmoniumNotesRoute: typeof HarmoniumNotesRoute
+  HarmoniumSongsRoute: typeof HarmoniumSongsRoute
+  HowToPlayHarmoniumRoute: typeof HowToPlayHarmoniumRoute
+  LearnRoute: typeof LearnRoute
   PlayRoute: typeof PlayRoute
+  PlayHarmoniumOnlineRoute: typeof PlayHarmoniumOnlineRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  VirtualHarmoniumRoute: typeof VirtualHarmoniumRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -68,11 +156,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/harmonium-notes': {
+      id: '/harmonium-notes'
+      path: '/harmonium-notes'
+      fullPath: '/harmonium-notes'
+      preLoaderRoute: typeof HarmoniumNotesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/harmonium-songs': {
+      id: '/harmonium-songs'
+      path: '/harmonium-songs'
+      fullPath: '/harmonium-songs'
+      preLoaderRoute: typeof HarmoniumSongsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/how-to-play-harmonium': {
+      id: '/how-to-play-harmonium'
+      path: '/how-to-play-harmonium'
+      fullPath: '/how-to-play-harmonium'
+      preLoaderRoute: typeof HowToPlayHarmoniumRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/learn': {
+      id: '/learn'
+      path: '/learn'
+      fullPath: '/learn'
+      preLoaderRoute: typeof LearnRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/play': {
       id: '/play'
       path: '/play'
       fullPath: '/play'
       preLoaderRoute: typeof PlayRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/play-harmonium-online': {
+      id: '/play-harmonium-online'
+      path: '/play-harmonium-online'
+      fullPath: '/play-harmonium-online'
+      preLoaderRoute: typeof PlayHarmoniumOnlineRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/sitemap.xml': {
@@ -82,13 +205,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/virtual-harmonium': {
+      id: '/virtual-harmonium'
+      path: '/virtual-harmonium'
+      fullPath: '/virtual-harmonium'
+      preLoaderRoute: typeof VirtualHarmoniumRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  HarmoniumNotesRoute: HarmoniumNotesRoute,
+  HarmoniumSongsRoute: HarmoniumSongsRoute,
+  HowToPlayHarmoniumRoute: HowToPlayHarmoniumRoute,
+  LearnRoute: LearnRoute,
   PlayRoute: PlayRoute,
+  PlayHarmoniumOnlineRoute: PlayHarmoniumOnlineRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  VirtualHarmoniumRoute: VirtualHarmoniumRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

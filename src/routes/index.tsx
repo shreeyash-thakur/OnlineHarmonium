@@ -1,25 +1,33 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import {
-  Music, Piano, Sparkles, WifiOff, Zap, BookOpen, Cable, Gauge,
-} from "lucide-react";
+import { Music, Piano, Sparkles, WifiOff, Zap, BookOpen, Cable, Gauge } from "lucide-react";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Virtual Harmonium Online — Free Browser Harmonium | Riyaz" },
-      { name: "description", content: "Play a free online harmonium in your browser with realistic sampled reeds and sargam labels. No installs — instant, MIDI-ready, works on mobile and desktop." },
-      { name: "keywords", content: "virtual harmonium, online harmonium, harmonium online, harmonium app, sargam, riyaz, indian classical music, learn harmonium" },
-      { name: "robots", content: "index, follow, max-image-preview:large" },
-      { property: "og:title", content: "Virtual Harmonium Online — Play Free in Your Browser" },
-      { property: "og:description", content: "Realistic sampled harmonium with sargam learning tools. Free, instant, no install." },
+      { title: "Online Harmonium - Play Free Virtual Harmonium Keyboard Online" },
+      { name: "description", content: "Play harmonium online for free using our virtual harmonium keyboard. Practice Sa Re Ga Ma notes, learn harmonium songs, and play Indian classical music on mobile and computer." },
+      { name: "keywords", content: "online harmonium, play harmonium online, virtual harmonium, online harmonium keyboard, free harmonium online, harmonium notes, Sa Re Ga Ma harmonium, harmonium practice online, learn harmonium online, harmonium songs for beginners, Indian musical instrument online, virtual Indian keyboard" },
+      { name: "robots", content: "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" },
+      { property: "og:title", content: "Online Harmonium - Play Free Virtual Harmonium Keyboard Online" },
+      { property: "og:description", content: "Play harmonium online for free using our virtual harmonium keyboard. Practice Sa Re Ga Ma notes, learn harmonium songs, and play Indian classical music on mobile and computer." },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "/" },
+      { property: "og:url", content: "https://onlineharmonium.vercel.app/" },
+      { property: "og:image", content: "https://onlineharmonium.vercel.app/og-image.jpg" },
+      { property: "og:image:width", content: "1200" },
+      { property: "og:image:height", content: "630" },
+      { property: "og:image:alt", content: "Virtual Harmonium Keyboard - Play Online for Free" },
+      { property: "og:site_name", content: "Online Harmonium - Riyaz" },
+      { property: "og:locale", content: "en_US" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "Virtual Harmonium Online — Riyaz" },
-      { name: "twitter:description", content: "Play a beautifully crafted online harmonium. Free, in your browser." },
+      { name: "twitter:site", content: "@riyazapp" },
+      { name: "twitter:creator", content: "@riyazapp" },
+      { name: "twitter:title", content: "Online Harmonium - Play Free Virtual Harmonium Keyboard Online" },
+      { name: "twitter:description", content: "Play harmonium online for free using our virtual harmonium keyboard. Practice Sa Re Ga Ma notes, learn harmonium songs, and play Indian classical music on mobile and computer." },
+      { name: "twitter:image", content: "https://onlineharmonium.vercel.app/og-image.jpg" },
     ],
-    links: [{ rel: "canonical", href: "/" }],
+    links: [{ rel: "canonical", href: "https://onlineharmonium.vercel.app/" }],
     scripts: [
       {
         type: "application/ld+json",
@@ -27,23 +35,66 @@ export const Route = createFileRoute("/")({
           "@context": "https://schema.org",
           "@graph": [
             {
+              "@type": "WebSite",
+              name: "Online Harmonium - Riyaz",
+              url: "https://onlineharmonium.vercel.app/",
+              description: "Free online virtual harmonium with realistic sampled reeds and sargam labels.",
+              potentialAction: {
+                "@type": "SearchAction",
+                target: "https://onlineharmonium.vercel.app/search?q={search_term_string}",
+                "query-input": "required name=search_term_string",
+              },
+            },
+            {
+              "@type": "Organization",
+              name: "Riyaz",
+              url: "https://onlineharmonium.vercel.app/",
+              logo: "https://onlineharmonium.vercel.app/logo.png",
+              sameAs: [
+                "https://twitter.com/riyazapp",
+                "https://www.youtube.com/@riyazapp",
+                "https://www.instagram.com/riyazapp/",
+              ],
+            },
+            {
               "@type": "WebApplication",
               name: "Riyaz Virtual Harmonium",
               applicationCategory: "MusicApplication",
               operatingSystem: "Any (Web Browser)",
-              url: "/",
-              description: "Free online harmonium with realistic sampled reeds and sargam labels.",
+              url: "https://onlineharmonium.vercel.app/",
+              description: "Free online harmonium with realistic sampled reeds and sargam labels. Play Indian classical music, practice Sa Re Ga Ma, and learn harmonium songs.",
               offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
               aggregateRating: { "@type": "AggregateRating", ratingValue: "4.9", ratingCount: "128" },
+              browserRequirements: "Requires JavaScript. Requires HTML5.",
+              softwareVersion: "1.0.0",
+              releaseNotes: "Initial release with 27-key scale-changer harmonium, sargam labels, and MIDI support.",
             },
             {
               "@type": "FAQPage",
               mainEntity: [
-                { "@type": "Question", name: "Is the virtual harmonium free?", acceptedAnswer: { "@type": "Answer", text: "Yes. Riyaz is completely free to play in your browser with no installs or sign-ups." } },
-                { "@type": "Question", name: "Does it work on mobile?", acceptedAnswer: { "@type": "Answer", text: "Yes. The harmonium keyboard is touch-optimised and scales to fit any phone, tablet or laptop screen." } },
-                { "@type": "Question", name: "Can I use my computer keyboard?", acceptedAnswer: { "@type": "Answer", text: "Yes. Every key is mapped to a computer key — Sa is on E — so you can play without a mouse." } },
+                { "@type": "Question", name: "What is an online harmonium?", acceptedAnswer: { "@type": "Answer", text: "An online harmonium is a virtual/web-based version of the traditional Indian harmonium. It allows you to play harmonium directly in your browser without downloading any software. You can use your mouse, touch screen, or computer keyboard to play notes." } },
+                { "@type": "Question", name: "Can I play harmonium online for free?", acceptedAnswer: { "@type": "Answer", text: "Yes! Our online harmonium is completely free to use. No downloads, no sign-ups, no hidden fees. Just open the website and start playing harmonium instantly in your browser." } },
+                { "@type": "Question", name: "Can beginners learn harmonium using this website?", acceptedAnswer: { "@type": "Answer", text: "Absolutely! Our virtual harmonium is perfect for beginners. It features sargam labels (Sa Re Ga Ma), western note labels, keyboard mappings, and practice modes to help you learn harmonium step by step." } },
+                { "@type": "Question", name: "What are Sa Re Ga Ma notes?", acceptedAnswer: { "@type": "Answer", text: "Sa Re Ga Ma are the seven basic notes (swaras) in Indian classical music, equivalent to Do Re Mi Fa So La Ti in Western music. On our online harmonium, these are labeled on the keys to help you learn and practice Indian classical music." } },
+                { "@type": "Question", name: "Does this work on mobile?", acceptedAnswer: { "@type": "Answer", text: "Yes! Our virtual harmonium works perfectly on mobile phones, tablets, and desktops. The touch interface is optimized for mobile devices, so you can practice harmonium anywhere, anytime." } },
               ],
             },
+            {
+              "@type": "MusicInstrument",
+              name: "Virtual Harmonium",
+              description: "Digital/online version of the Indian harmonium with realistic sampled reed sounds",
+              musicalInstrumentType: "Organ",
+            },
+          ],
+        }),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            { "@type": "ListItem", position: 1, name: "Home", item: "https://onlineharmonium.vercel.app/" },
           ],
         }),
       },
@@ -57,6 +108,11 @@ function Landing() {
     <div className="min-h-screen">
       <Nav />
       <Hero />
+      <WhatIsOnlineHarmonium />
+      <HowToPlay />
+      <HarmoniumNotes />
+      <Songs />
+      <FAQ />
       <Features />
       <Modes />
       <Footer />
@@ -73,13 +129,22 @@ function Nav() {
           <span className="font-display font-semibold tracking-tight">Riyaz</span>
         </Link>
         <nav className="hidden md:flex items-center gap-8 text-sm text-muted-foreground">
-          <a href="#features" className="hover:text-foreground transition">Features</a>
-          <a href="#modes" className="hover:text-foreground transition">Modes</a>
-          <a href="#learn" className="hover:text-foreground transition">Learn</a>
+          <Link to="/learn" className="hover:text-foreground transition">
+            Learn
+          </Link>
+          <a href="#features" className="hover:text-foreground transition">
+            Features
+          </a>
+          <a href="#modes" className="hover:text-foreground transition">
+            Modes
+          </a>
         </nav>
-        <Link to="/play" className="px-4 py-2 rounded-full text-sm btn-gold btn-gold-hover">
-          Play Now
-        </Link>
+        <div className="flex items-center gap-3">
+          <ThemeToggle />
+          <Link to="/play" className="px-4 py-2 rounded-full text-sm btn-gold btn-gold-hover">
+            Play Now
+          </Link>
+        </div>
       </div>
     </header>
   );
@@ -98,19 +163,20 @@ function Hero() {
 
         <motion.h1
           initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.1 }}
-          className="text-5xl sm:text-6xl md:text-7xl font-display font-semibold leading-[1.02]"
+          className="text-4xl sm:text-5xl md:text-6xl font-display font-semibold leading-[1.1]"
         >
-          <span className="block">The world's most</span>
-          <span className="gold-text">expressive harmonium,</span>
-          <span className="block">in your browser.</span>
+          <span className="block">Play Online Harmonium -</span>
+          <span className="gold-text">Free Virtual Harmonium Keyboard</span>
         </motion.h1>
 
         <motion.p
           initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.2 }}
-          className="mt-6 text-lg text-muted-foreground max-w-2xl mx-auto"
+          className="mt-6 text-base sm:text-lg text-muted-foreground max-w-3xl mx-auto"
         >
-          Realistic sampled reeds and breathing bellows —
-          crafted for riyaz, bhajans, film songs and classical practice.
+          Experience the best <strong>online harmonium</strong> with realistic sampled reeds and breathing bellows.
+          Practice <strong>Sa Re Ga Ma</strong> notes, learn harmonium songs, and play Indian classical music.
+          Our <strong>virtual harmonium keyboard</strong> works instantly in your browser - no downloads required.
+          Perfect for beginners and professionals alike.
         </motion.p>
 
         <motion.div
@@ -118,11 +184,11 @@ function Hero() {
           className="mt-8 flex flex-wrap items-center justify-center gap-3"
         >
           <Link to="/play" className="btn-gold btn-gold-hover px-6 py-3 rounded-full font-medium inline-flex items-center gap-2">
-            <Piano className="h-4 w-4" /> Play Now
+            <Piano className="h-4 w-4" /> Start Playing Harmonium
           </Link>
-          <a href="#learn" className="btn-ghost-gold px-6 py-3 rounded-full font-medium inline-flex items-center gap-2">
+          <Link to="/learn" className="btn-ghost-gold px-6 py-3 rounded-full font-medium inline-flex items-center gap-2">
             <BookOpen className="h-4 w-4" /> Learn Harmonium
-          </a>
+          </Link>
         </motion.div>
 
         {/* Hero instrument mock */}
@@ -190,6 +256,262 @@ function Hero() {
   );
 }
 
+function WhatIsOnlineHarmonium() {
+  return (
+    <section className="py-24 border-t border-white/5">
+      <div className="max-w-6xl mx-auto px-6">
+        <div className="max-w-3xl">
+          <h2 className="text-3xl md:text-4xl font-display mb-6">What is an Online Harmonium?</h2>
+          <div className="space-y-4 text-muted-foreground leading-relaxed">
+            <p>
+              An <strong>online harmonium</strong> is a digital, web-based version of the traditional Indian harmonium (also known as a reed organ or pump organ).
+              It allows musicians, students, and enthusiasts to play the harmonium directly in their web browser without needing to download any software or purchase expensive equipment.
+            </p>
+            <p>
+              The <strong>virtual harmonium</strong> replicates the sound and feel of a real harmonium using high-quality audio samples and realistic interaction design.
+              You can use your mouse, touch screen, or computer keyboard to play notes, making it accessible for everyone.
+            </p>
+            <p>
+              Learning <strong>harmonium online</strong> has become increasingly popular because it offers convenience and accessibility.
+              Whether you want to practice <strong>Sa Re Ga Ma</strong> (the seven basic notes of Indian classical music), learn new <strong>harmonium songs for beginners</strong>,
+              or practice <strong>harmonium notes</strong> for riyaz (daily practice), an <strong>online harmonium keyboard</strong> provides a flexible and effective tool.
+            </p>
+            <p>
+              Our <strong>free harmonium online</strong> features a 27-key scale-changer layout, sargam labels, western note labels, and MIDI support,
+              making it one of the most comprehensive <strong>Indian musical instruments online</strong> available.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function HowToPlay() {
+  const steps = [
+    {
+      title: "Open the Harmonium",
+      desc: "Navigate to the play page and wait for the audio engine to initialize. No download or installation needed.",
+      icon: "1",
+    },
+    {
+      title: "Use Your Keyboard or Touch",
+      desc: "Play notes using your computer keyboard (Sa is mapped to E) or by clicking/touching the on-screen keys on mobile and desktop.",
+      icon: "2",
+    },
+    {
+      title: "Learn the Notes",
+      desc: "Toggle between Sargam (Sa Re Ga Ma) and Western note labels to understand the musical layout. Practice scales and melodies.",
+      icon: "3",
+    },
+    {
+      title: "Experiment with Sounds",
+      desc: "Choose from multiple presets like Old Delhi, Scale Changer, Concert, and Vintage. Adjust volume and explore different timbres.",
+      icon: "4",
+    },
+  ];
+
+  return (
+    <section className="py-24 border-t border-white/5 bg-gradient-to-b from-transparent to-white/[0.02]">
+      <div className="max-w-6xl mx-auto px-6">
+        <h2 className="text-3xl md:text-4xl font-display mb-6">How to Play Harmonium Online?</h2>
+        <p className="text-muted-foreground max-w-2xl mb-12">
+          Getting started with our <strong>virtual harmonium</strong> is easy. Follow these simple steps to begin your
+          <strong> harmonium practice online</strong>.
+        </p>
+
+        <div className="grid md:grid-cols-2 gap-6">
+          {steps.map((step, i) => (
+            <motion.div
+              key={step.title}
+              initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }} transition={{ delay: i * 0.1 }}
+              className="glass rounded-2xl p-6"
+            >
+              <div className="flex items-start gap-4">
+                <div className="h-10 w-10 rounded-full btn-gold grid place-items-center font-display font-bold text-sm shrink-0">
+                  {step.icon}
+                </div>
+                <div>
+                  <h3 className="font-display text-lg mb-1">{step.title}</h3>
+                  <p className="text-sm text-muted-foreground">{step.desc}</p>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+
+        <div className="mt-12 glass rounded-2xl p-6 sm:p-8">
+          <h3 className="font-display text-xl mb-4">Keyboard Controls & Mobile Touch</h3>
+          <div className="grid sm:grid-cols-2 gap-6 text-sm">
+            <div>
+              <h4 className="font-semibold mb-2 text-foreground">💻 Computer Keyboard</h4>
+              <p className="text-muted-foreground mb-2">
+                Play the <strong>online harmonium keyboard</strong> using your computer keys. Each note is mapped to a convenient key.
+                For example, <kbd className="px-2 py-1 rounded bg-white/10 font-mono">E</kbd> is Sa.
+                This makes <strong>harmonium practice online</strong> fast and intuitive.
+              </p>
+            </div>
+            <div>
+              <h4 className="font-semibold mb-2 text-foreground">📱 Mobile Touch</h4>
+              <p className="text-muted-foreground mb-2">
+                Touch any key on the screen to play. The interface is fully responsive and optimized for phones and tablets.
+                Start <strong>learning harmonium online</strong> anywhere, anytime.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function HarmoniumNotes() {
+  return (
+    <section className="py-24 border-t border-white/5">
+      <div className="max-w-6xl mx-auto px-6">
+        <h2 className="text-3xl md:text-4xl font-display mb-6">Harmonium Notes (Sa Re Ga Ma)</h2>
+        <p className="text-muted-foreground max-w-3xl mb-8">
+          Understanding <strong>harmonium notes</strong> is essential for playing Indian classical music.
+          The seven basic notes, known as <strong>Sa Re Ga Ma</strong> (Sargam), form the foundation of melody.
+        </p>
+
+        <div className="glass rounded-2xl p-6 sm:p-8 mb-8">
+          <h3 className="font-display text-2xl mb-4">The Seven Notes (Saptak)</h3>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {[
+              { sargam: "Sa (S)", western: "C (Do)", desc: "The tonic note. The starting point of all ragas." },
+              { sargam: "Re (R)", western: "D (Re)", desc: "The second note, whole step above Sa." },
+              { sargam: "Ga (G)", western: "E (Mi)", desc: "The third note, another whole step up." },
+              { sargam: "Ma (M)", western: "F (Fa)", desc: "The fourth note, half step above Ga." },
+              { sargam: "Pa (P)", western: "G (Sol)", desc: "The fifth note, whole step above Ma." },
+              { sargam: "Dha (D)", western: "A (La)", desc: "The sixth note, whole step above Pa." },
+              { sargam: "Ni (N)", western: "B (Ti)", desc: "The seventh note, whole step above Dha." },
+            ].map((note) => (
+              <div key={note.sargam} className="p-4 rounded-xl bg-white/5 border border-white/10">
+                <div className="font-display text-lg text-gold-soft">{note.sargam}</div>
+                <div className="text-xs text-muted-foreground mb-1">{note.western}</div>
+                <p className="text-xs text-muted-foreground">{note.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-6">
+          <div className="glass rounded-2xl p-6">
+            <h3 className="font-display text-xl mb-3">Mandhra Saptak (Lower Octave)</h3>
+            <p className="text-sm text-muted-foreground">
+              The lower octave notes are indicated with a dot below the note (e.g., ऋ). On our harmonium,
+              these appear as the leftmost keys. Practice these to develop control over the lower register.
+            </p>
+          </div>
+          <div className="glass rounded-2xl p-6">
+            <h3 className="font-display text-xl mb-3">Tara Saptak (Upper Octave)</h3>
+            <p className="text-sm text-muted-foreground">
+              The upper octave notes are shown with a dot above (e.g., त). These are the rightmost keys on the keyboard.
+              Mastering the upper octave is crucial for playing complex ragas and melodies.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Songs() {
+  const songs = [
+    { title: "Raga Bhupali", difficulty: "Beginner", type: "Raga" },
+    { title: "Raga Yaman", difficulty: "Beginner", type: "Raga" },
+    { title: "Raga Brindavani Sarang", difficulty: "Intermediate", type: "Raga" },
+    { title: "Raga Bhairavi", difficulty: "Advanced", type: "Raga" },
+    { title: "Hanuman Chalisa", difficulty: "Beginner", type: "Bhajan" },
+    { title: "Om Jai Jagdish Hare", difficulty: "Beginner", type: "Aarti" },
+  ];
+
+  return (
+    <section className="py-24 border-t border-white/5">
+      <div className="max-w-6xl mx-auto px-6">
+        <h2 className="text-3xl md:text-4xl font-display mb-4">Learn Popular Harmonium Songs</h2>
+        <p className="text-muted-foreground max-w-2xl mb-8">
+          Explore our collection of <strong>harmonium songs for beginners</strong> and intermediate players.
+          Practice traditional ragas, bhajans, and aartis on your <strong>virtual harmonium</strong>.
+        </p>
+
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {songs.map((song, i) => (
+            <motion.div
+              key={song.title}
+              initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }} transition={{ delay: i * 0.05 }}
+              className="glass rounded-2xl p-5 hover:border-gold/30 transition-colors"
+            >
+              <div className="flex items-start justify-between mb-2">
+                <h3 className="font-display text-lg">{song.title}</h3>
+                <Music className="h-5 w-5 text-gold-soft shrink-0" />
+              </div>
+              <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                <span className="px-2 py-1 rounded-full bg-white/5">{song.type}</span>
+                <span className="px-2 py-1 rounded-full bg-white/5">{song.difficulty}</span>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+
+        <div className="mt-10 text-center">
+          <Link to="/play" className="btn-gold btn-gold-hover px-6 py-3 rounded-full font-medium inline-flex items-center gap-2">
+            <Piano className="h-4 w-4" /> Practice Now on Harmonium
+          </Link>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function FAQ() {
+  const faqs = [
+    {
+      q: "What is an online harmonium?",
+      a: "An online harmonium is a virtual version of the traditional Indian harmonium that you can play directly in your browser. It features realistic sampled reed sounds, sargam labels, and supports both mouse/touch and computer keyboard input. It's perfect for learning and practicing Indian classical music without needing a physical instrument."
+    },
+    {
+      q: "Can I play harmonium online for free?",
+      a: "Yes! Our online harmonium is completely free to use. There are no downloads, no sign-ups, and no hidden fees. Just visit our website and start playing instantly. We offer a full-featured virtual harmonium with multiple presets, sargam labels, and MIDI support at no cost."
+    },
+    {
+      q: "Can beginners learn harmonium using this website?",
+      a: "Absolutely! Our virtual harmonium is perfect for beginners. It includes sargam labels (Sa Re Ga Ma), western note labels, keyboard mappings, and practice modes. You can start with basic scales and gradually move to complex ragas and songs. The interface is intuitive and works on all devices."
+    },
+    {
+      q: "What are Sa Re Ga Ma notes?",
+      a: "Sa Re Ga Ma are the seven basic notes (swaras) in Indian classical music. Sa (C/Do), Re (D/Re), Ga (E/Mi), Ma (F/Fa), Pa (G/Sol), Dha (A/La), Ni (B/Ti). These notes form the foundation of all ragas and melodies. On our harmonium, they're clearly labeled to help you learn and practice."
+    },
+    {
+      q: "Does this work on mobile?",
+      a: "Yes! Our virtual harmonium is fully optimized for mobile phones and tablets. The touch interface is responsive and intuitive, allowing you to play notes by simply tapping the screen. You can practice harmonium anywhere - at home, while traveling, or during breaks."
+    },
+    {
+      q: "Is there a way to practice harmonium songs?",
+      a: "Yes, you can practice hundreds of harmonium songs including traditional ragas, bhajans, and aartis. Our website provides note references and guidance for popular pieces. You can start with beginner-friendly songs like Hanuman Chalisa and Om Jai Jagdish Hare, then progress to more complex ragas."
+    },
+  ];
+
+  return (
+    <section className="py-24 border-t border-white/5">
+      <div className="max-w-4xl mx-auto px-6">
+        <h2 className="text-3xl md:text-4xl font-display mb-8">Frequently Asked Questions</h2>
+        <div className="space-y-4">
+          {faqs.map((faq, i) => (
+            <div key={i} className="glass rounded-2xl p-6">
+              <h3 className="font-display text-lg mb-2">{faq.q}</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">{faq.a}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 const features = [
   { icon: WifiOff, title: "No installation", desc: "Runs entirely in your browser. Zero setup." },
   { icon: Music, title: "Real sampled reeds", desc: "Warm harmonium tone with authentic bellows breath." },
@@ -234,7 +556,7 @@ function Modes() {
   const items = [
     { title: "Harmonium", desc: "Play a full 27-key scale-changer harmonium with authentic reed presets.", to: "/play" },
     { title: "MIDI Play", desc: "Plug in a MIDI keyboard for expressive, low-latency practice.", to: "/play" },
-    { title: "Learn", desc: "Sargam and western note labels on every key.", to: "/play" },
+    { title: "Learn", desc: "Sargam and western note labels on every key.", to: "/learn" },
   ];
   return (
     <section id="modes" className="pb-24">
@@ -264,10 +586,14 @@ function Footer() {
   return (
     <footer className="border-t border-white/5 py-10">
       <div className="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
-        <div>© {new Date().getFullYear()} Riyaz. Crafted for musicians.</div>
-        <div className="flex gap-6">
-          <Link to="/play" className="hover:text-foreground">Play</Link>
-          <a href="#features" className="hover:text-foreground">Features</a>
+        <div>© {new Date().getFullYear()} Online Harmonium - Riyaz. Crafted for musicians.</div>
+        <div className="flex gap-6 flex-wrap justify-center">
+          <Link to="/" className="hover:text-foreground">Home</Link>
+          <Link to="/play" className="hover:text-foreground">Play Harmonium</Link>
+          <Link to="/learn" className="hover:text-foreground">Learn</Link>
+          <Link to="/harmonium-notes" className="hover:text-foreground">Harmonium Notes</Link>
+          <Link to="/how-to-play-harmonium" className="hover:text-foreground">How to Play</Link>
+          <Link to="/harmonium-songs" className="hover:text-foreground">Harmonium Songs</Link>
         </div>
       </div>
     </footer>

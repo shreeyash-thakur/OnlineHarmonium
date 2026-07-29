@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Harmonium } from "@/components/Harmonium";
 import { AdSlot } from "@/components/AdSlot";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { ArrowLeft } from "lucide-react";
 
 export const Route = createFileRoute("/play")({
@@ -43,9 +44,14 @@ function PlayPage() {
         <Link to="/" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition">
           <ArrowLeft className="h-4 w-4" /> Back
         </Link>
-        <div className="flex items-center gap-2">
-          <div className="h-8 w-8 rounded-lg btn-gold grid place-items-center font-display font-bold text-sm">R</div>
-          <span className="font-display font-semibold tracking-tight">Riyaz</span>
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
+            <div className="h-8 w-8 rounded-lg btn-gold grid place-items-center font-display font-bold text-sm">
+              R
+            </div>
+            <span className="font-display font-semibold tracking-tight">Riyaz</span>
+          </div>
+          <ThemeToggle />
         </div>
       </header>
 

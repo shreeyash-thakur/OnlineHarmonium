@@ -3,17 +3,15 @@
 // and rendered inline (not overlapping) — matches the reference site's
 // scale-changer layout.
 export type Key = {
-  note: string;      // e.g. "C4"
+  note: string; // e.g. "C4"
   midi: number;
   isBlack: boolean;
-  sargam: string;    // Indian solfege as shown on reference site
-  western: string;   // C, C#, D...
-  kb?: string;       // computer keyboard binding
+  sargam: string; // Indian solfege as shown on reference site
+  western: string; // C, C#, D...
+  kb?: string; // computer keyboard binding
 };
 
-const semitoneToWestern = [
-  "C","C#","D","D#","E","F","F#","G","G#","A","A#","B",
-];
+const semitoneToWestern = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
 
 // Exact sequence from web-harmonium.com default view (F3..G5, 27 keys).
 // Each row: [kb, sargam, isBlack]

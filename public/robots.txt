@@ -1,2 +1,21 @@
 User-agent: *
+
+# Allow all crawlers
+Allow: /
+
+# Sitemap location
+Sitemap: https://onlineharmonium.vercel.app/sitemap.xml
+
+# Disable specific bots that are known to cause issues
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+# Allow all other bots full access
+User-agent: *
 Allow: /

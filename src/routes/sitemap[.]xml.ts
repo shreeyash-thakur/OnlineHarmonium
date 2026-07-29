@@ -17,6 +17,12 @@ export const Route = createFileRoute("/sitemap.xml")({
         const entries: SitemapEntry[] = [
           { path: "/", changefreq: "weekly", priority: "1.0" },
           { path: "/play", changefreq: "weekly", priority: "0.9" },
+          { path: "/learn", changefreq: "weekly", priority: "0.9" },
+          { path: "/play-harmonium-online", changefreq: "weekly", priority: "0.9" },
+          { path: "/harmonium-notes", changefreq: "weekly", priority: "0.8" },
+          { path: "/how-to-play-harmonium", changefreq: "weekly", priority: "0.8" },
+          { path: "/harmonium-songs", changefreq: "weekly", priority: "0.8" },
+          { path: "/virtual-harmonium", changefreq: "weekly", priority: "0.8" },
         ];
 
         const urls = entries.map((e) =>
