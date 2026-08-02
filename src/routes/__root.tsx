@@ -14,9 +14,9 @@ import { themeInitScript } from "@/lib/theme";
 
 // Register service worker for PWA
 function registerServiceWorker() {
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/sw.js').catch(() => {
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("/sw.js").catch(() => {
         // SW registration failed - app still works
       });
     });
@@ -114,9 +114,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         src: "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5691989206254780",
         async: true,
         crossOrigin: "anonymous",
-      },
-      {
-        children: `(function(vfrg){var d=document,s=d.createElement('script'),l=d.scripts[d.scripts.length-1];s.settings=vfrg||{};s.src="//massivesalad.com/bgX.V/sUdGGxlX0/YUWmcL/seKm-9CuNZkU/lBkLPBTocsylN/ztgF3VMKDmUGtsNNzbIJ3WOVD_cJwjOWQv";s.async=true;s.referrerPolicy='no-referrer-when-downgrade';l.parentNode.insertBefore(s,l);})({})`,
       },
       { children: themeInitScript() },
     ],

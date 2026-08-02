@@ -26,6 +26,10 @@ export const Route = createFileRoute("/sitemap.xml")({
           { path: "/how-to-play-harmonium", changefreq: "weekly", priority: "0.8", lastmod: today },
           { path: "/harmonium-songs", changefreq: "weekly", priority: "0.8", lastmod: today },
           { path: "/virtual-harmonium", changefreq: "monthly", priority: "0.7", lastmod: today },
+          { path: "/about", changefreq: "monthly", priority: "0.5", lastmod: today },
+          { path: "/contact", changefreq: "monthly", priority: "0.5", lastmod: today },
+          { path: "/privacy-policy", changefreq: "yearly", priority: "0.3", lastmod: today },
+          { path: "/terms", changefreq: "yearly", priority: "0.3", lastmod: today },
         ];
 
         const urls = entries.map((e) =>

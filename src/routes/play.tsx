@@ -8,11 +8,22 @@ export const Route = createFileRoute("/play")({
   head: () => ({
     meta: [
       { title: "Play Virtual Harmonium Online — Free, Realistic Sampled Reeds | Riyaz" },
-      { name: "description", content: "Play a realistic online harmonium free in your browser. 27-key scale-changer layout, sargam and western labels, and computer keyboard support." },
-      { name: "keywords", content: "play harmonium online, virtual harmonium, online harmonium keyboard, harmonium sargam" },
+      {
+        name: "description",
+        content:
+          "Play a realistic online harmonium free in your browser. 27-key scale-changer layout, sargam and western labels, and computer keyboard support.",
+      },
+      {
+        name: "keywords",
+        content:
+          "play harmonium online, virtual harmonium, online harmonium keyboard, harmonium sargam",
+      },
       { name: "robots", content: "index, follow, max-image-preview:large" },
       { property: "og:title", content: "Play the Virtual Harmonium — Free Online" },
-      { property: "og:description", content: "Realistic sampled harmonium, playable in the browser, free." },
+      {
+        property: "og:description",
+        content: "Realistic sampled harmonium, playable in the browser, free.",
+      },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://onlineharmonium.vercel.app/play" },
       { property: "og:image", content: "https://onlineharmonium.vercel.app/og-image.jpg" },
@@ -21,7 +32,10 @@ export const Route = createFileRoute("/play")({
       { property: "og:image:alt", content: "Play the Virtual Harmonium Online" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "Play Virtual Harmonium Online" },
-      { name: "twitter:description", content: "Realistic sampled harmonium. Play free in your browser." },
+      {
+        name: "twitter:description",
+        content: "Realistic sampled harmonium. Play free in your browser.",
+      },
       { name: "twitter:image", content: "https://onlineharmonium.vercel.app/og-image.jpg" },
     ],
     links: [{ rel: "canonical", href: "https://onlineharmonium.vercel.app/play" }],
@@ -32,8 +46,18 @@ export const Route = createFileRoute("/play")({
           "@context": "https://schema.org",
           "@type": "BreadcrumbList",
           itemListElement: [
-            { "@type": "ListItem", position: 1, name: "Home", item: "https://onlineharmonium.vercel.app/" },
-            { "@type": "ListItem", position: 2, name: "Play", item: "https://onlineharmonium.vercel.app/play" },
+            {
+              "@type": "ListItem",
+              position: 1,
+              name: "Home",
+              item: "https://onlineharmonium.vercel.app/",
+            },
+            {
+              "@type": "ListItem",
+              position: 2,
+              name: "Play",
+              item: "https://onlineharmonium.vercel.app/play",
+            },
           ],
         }),
       },
@@ -46,7 +70,8 @@ export const Route = createFileRoute("/play")({
           applicationCategory: "MusicApplication",
           operatingSystem: "Any (Web Browser)",
           url: "https://onlineharmonium.vercel.app/play",
-          description: "Play a realistic online harmonium free in your browser. 27-key scale-changer layout, sargam and western labels, and computer keyboard support.",
+          description:
+            "Play a realistic online harmonium free in your browser. 27-key scale-changer layout, sargam and western labels, and computer keyboard support.",
           offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
           browserRequirements: "Requires JavaScript. Requires HTML5.",
         }),
@@ -60,7 +85,10 @@ function PlayPage() {
   return (
     <div className="min-h-screen">
       <header className="max-w-7xl mx-auto px-6 py-6 flex items-center justify-between">
-        <Link to="/" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition">
+        <Link
+          to="/"
+          className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition"
+        >
           <ArrowLeft className="h-4 w-4" /> Back
         </Link>
         <div className="flex items-center gap-3">

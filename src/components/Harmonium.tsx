@@ -390,7 +390,9 @@ export function Harmonium() {
                   onClick={allowKeyboardInput}
                   disabled={audioStarting}
                   className={`inline-flex items-center justify-center rounded-full px-4 py-2 text-sm font-semibold transition ${
-                    audioStarting ? "bg-white/10 text-muted-foreground" : "glass text-foreground hover:text-foreground"
+                    audioStarting
+                      ? "bg-white/10 text-muted-foreground"
+                      : "glass text-foreground hover:text-foreground"
                   }`}
                 >
                   Allow keyboard input

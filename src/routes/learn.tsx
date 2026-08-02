@@ -4,23 +4,42 @@ export const Route = createFileRoute("/learn")({
   head: () => ({
     meta: [
       { title: "Learn Harmonium Online — Levels, Alankars, Sargam & Taal | Riyaz" },
-      { name: "description", content: "A complete harmonium course: beginner-to-advanced levels, sargam, alankars (paltas), bellows technique, thaats, taal and laya, ornaments, and a riyaz routine — free, in your browser." },
-      { name: "keywords", content: "learn harmonium, harmonium lessons online, sargam notes, alankar, palta, harmonium bellows technique, riyaz practice, learn indian classical music, harmonium for beginners, thaat, raag basics, taal, laya, meend, gamak" },
+      {
+        name: "description",
+        content:
+          "A complete harmonium course: beginner-to-advanced levels, sargam, alankars (paltas), bellows technique, thaats, taal and laya, ornaments, and a riyaz routine — free, in your browser.",
+      },
+      {
+        name: "keywords",
+        content:
+          "learn harmonium, harmonium lessons online, sargam notes, alankar, palta, harmonium bellows technique, riyaz practice, learn indian classical music, harmonium for beginners, thaat, raag basics, taal, laya, meend, gamak",
+      },
       { name: "robots", content: "index, follow, max-image-preview:large" },
       { name: "author", content: "Riyaz" },
       { name: "theme-color", content: "#160f09" },
       { property: "og:type", content: "website" },
       { property: "og:site_name", content: "Riyaz" },
       { property: "og:title", content: "Learn Harmonium Online — Levels, Alankars, Sargam & Taal" },
-      { property: "og:description", content: "A complete, level-by-level harmonium course: sargam, alankars, bellows control, thaats, taal, ornaments and a daily riyaz routine." },
+      {
+        property: "og:description",
+        content:
+          "A complete, level-by-level harmonium course: sargam, alankars, bellows control, thaats, taal, ornaments and a daily riyaz routine.",
+      },
       { property: "og:url", content: "https://onlineharmonium.vercel.app/learn" },
       { property: "og:image", content: "https://onlineharmonium.vercel.app/og-learn.jpg" },
       { property: "og:image:width", content: "1200" },
       { property: "og:image:height", content: "630" },
       { property: "og:locale", content: "en_US" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "Learn Harmonium Online — Levels, Alankars, Sargam & Taal | Riyaz" },
-      { name: "twitter:description", content: "A complete, level-by-level harmonium course: sargam, alankars, taal, thaats and ornaments — free, in your browser." },
+      {
+        name: "twitter:title",
+        content: "Learn Harmonium Online — Levels, Alankars, Sargam & Taal | Riyaz",
+      },
+      {
+        name: "twitter:description",
+        content:
+          "A complete, level-by-level harmonium course: sargam, alankars, taal, thaats and ornaments — free, in your browser.",
+      },
       { name: "twitter:image", content: "https://onlineharmonium.vercel.app/og-learn.jpg" },
     ],
     links: [{ rel: "canonical", href: "https://onlineharmonium.vercel.app/learn" }],
@@ -33,25 +52,48 @@ export const Route = createFileRoute("/learn")({
             {
               "@type": "BreadcrumbList",
               itemListElement: [
-                { "@type": "ListItem", position: 1, name: "Riyaz", item: "https://onlineharmonium.vercel.app/" },
-                { "@type": "ListItem", position: 2, name: "Learn", item: "https://onlineharmonium.vercel.app/learn" }
-              ]
+                {
+                  "@type": "ListItem",
+                  position: 1,
+                  name: "Riyaz",
+                  item: "https://onlineharmonium.vercel.app/",
+                },
+                {
+                  "@type": "ListItem",
+                  position: 2,
+                  name: "Learn",
+                  item: "https://onlineharmonium.vercel.app/learn",
+                },
+              ],
             },
             {
               "@type": "Course",
               name: "Learn Harmonium Online",
-              description: "A free, level-by-level harmonium course covering sargam, alankars, bellows technique, thaats, taal, laya, ornaments and a riyaz practice routine.",
+              description:
+                "A free, level-by-level harmonium course covering sargam, alankars, bellows technique, thaats, taal, laya, ornaments and a riyaz practice routine.",
               url: "https://onlineharmonium.vercel.app/learn",
-              provider: { "@type": "Organization", name: "Riyaz", url: "https://onlineharmonium.vercel.app/" },
+              provider: {
+                "@type": "Organization",
+                name: "Riyaz",
+                url: "https://onlineharmonium.vercel.app/",
+              },
               isAccessibleForFree: true,
               inLanguage: "en",
               hasCourseInstance: {
                 "@type": "CourseInstance",
                 courseMode: "online",
-                courseWorkload: "PT20M"
+                courseWorkload: "PT20M",
               },
               coursePrerequisites: "None",
-              teaches: ["Sargam notation", "Alankars and paltas", "Harmonium bellows technique", "Thaat and raag basics", "Taal and laya", "Ornamentation: meend, kan, gamak, murki", "Riyaz practice routines"]
+              teaches: [
+                "Sargam notation",
+                "Alankars and paltas",
+                "Harmonium bellows technique",
+                "Thaat and raag basics",
+                "Taal and laya",
+                "Ornamentation: meend, kan, gamak, murki",
+                "Riyaz practice routines",
+              ],
             },
             {
               "@type": "FAQPage",
@@ -59,36 +101,54 @@ export const Route = createFileRoute("/learn")({
                 {
                   "@type": "Question",
                   name: "Do I need to read music to learn harmonium?",
-                  acceptedAnswer: { "@type": "Answer", text: "No. Indian classical music is taught aurally through sargam — Sa Re Ga Ma Pa Dha Ni — which you learn by listening and repeating, not by reading staff notation." }
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: "No. Indian classical music is taught aurally through sargam — Sa Re Ga Ma Pa Dha Ni — which you learn by listening and repeating, not by reading staff notation.",
+                  },
                 },
                 {
                   "@type": "Question",
                   name: "What is an alankar?",
-                  acceptedAnswer: { "@type": "Answer", text: "An alankar, also called a palta, is a fixed melodic pattern practised across the full scale to build finger control, ear training and speed. They are the harmonium equivalent of scale exercises." }
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: "An alankar, also called a palta, is a fixed melodic pattern practised across the full scale to build finger control, ear training and speed. They are the harmonium equivalent of scale exercises.",
+                  },
                 },
                 {
                   "@type": "Question",
                   name: "How long does it take to reach an intermediate level on harmonium?",
-                  acceptedAnswer: { "@type": "Answer", text: "With daily riyaz of twenty to thirty minutes, most students move from beginner to intermediate — comfortable alankars, two or three thaats and basic taal keeping — in around four to six months." }
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: "With daily riyaz of twenty to thirty minutes, most students move from beginner to intermediate — comfortable alankars, two or three thaats and basic taal keeping — in around four to six months.",
+                  },
                 },
                 {
                   "@type": "Question",
                   name: "What is the difference between taal and laya?",
-                  acceptedAnswer: { "@type": "Answer", text: "Laya is the underlying tempo or speed of a performance. Taal is the fixed rhythmic cycle, made of a set number of beats grouped into sections, that a composition is set to — for example Teentaal has sixteen beats." }
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: "Laya is the underlying tempo or speed of a performance. Taal is the fixed rhythmic cycle, made of a set number of beats grouped into sections, that a composition is set to — for example Teentaal has sixteen beats.",
+                  },
                 },
                 {
                   "@type": "Question",
                   name: "What is riyaz?",
-                  acceptedAnswer: { "@type": "Answer", text: "Riyaz is the daily, disciplined practice routine at the heart of Indian classical training — short, repeated, focused sessions rather than occasional long ones." }
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: "Riyaz is the daily, disciplined practice routine at the heart of Indian classical training — short, repeated, focused sessions rather than occasional long ones.",
+                  },
                 },
                 {
                   "@type": "Question",
                   name: "Can I learn harmonium on a virtual keyboard before buying one?",
-                  acceptedAnswer: { "@type": "Answer", text: "Yes. A browser harmonium is enough to learn sargam, alankars, scale positions and bellows-timing habits; many players use it to warm up even after owning a physical instrument." }
-                }
-              ]
-            }
-          ]
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: "Yes. A browser harmonium is enough to learn sargam, alankars, scale positions and bellows-timing habits; many players use it to warm up even after owning a physical instrument.",
+                  },
+                },
+              ],
+            },
+          ],
         }),
       },
     ],
@@ -97,9 +157,7 @@ export const Route = createFileRoute("/learn")({
 });
 
 function LearnPage() {
-  return (
-    <div dangerouslySetInnerHTML={{ __html: learnHtml }} />
-  );
+  return <div dangerouslySetInnerHTML={{ __html: learnHtml }} />;
 }
 
 const learnHtml = `<style>

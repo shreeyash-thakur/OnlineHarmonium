@@ -23,5 +23,9 @@ export function setTheme(mode: "light" | "dark") {
   const root = document.documentElement;
   if (mode === "light") root.classList.add("light");
   else root.classList.remove("light");
-  try { localStorage.setItem("${STORAGE_KEY}", mode); } catch {}
+  try {
+    localStorage.setItem(STORAGE_KEY, mode);
+  } catch {
+    // localStorage unavailable (e.g. private browsing) — theme still applies for this session.
+  }
 }

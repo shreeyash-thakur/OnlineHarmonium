@@ -18,7 +18,10 @@ export const Route = createFileRoute("/practice")({
           "harmonium practice, harmonium exercises, Sa Re Ga Ma practice, harmonium practice online, harmonium alankars, sargam practice, learn harmonium for beginners",
       },
       { name: "robots", content: "index, follow, max-image-preview:large" },
-      { property: "og:title", content: "Harmonium Practice Exercises — Interactive Sa Re Ga Ma Trainer" },
+      {
+        property: "og:title",
+        content: "Harmonium Practice Exercises — Interactive Sa Re Ga Ma Trainer",
+      },
       {
         property: "og:description",
         content:
@@ -31,7 +34,10 @@ export const Route = createFileRoute("/practice")({
       { property: "og:image:height", content: "630" },
       { property: "og:image:alt", content: "Interactive Harmonium Practice Exercises" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "Harmonium Practice Exercises — Interactive Sa Re Ga Ma Trainer" },
+      {
+        name: "twitter:title",
+        content: "Harmonium Practice Exercises — Interactive Sa Re Ga Ma Trainer",
+      },
       {
         name: "twitter:description",
         content:
@@ -47,8 +53,18 @@ export const Route = createFileRoute("/practice")({
           "@context": "https://schema.org",
           "@type": "BreadcrumbList",
           itemListElement: [
-            { "@type": "ListItem", position: 1, name: "Home", item: "https://onlineharmonium.vercel.app/" },
-            { "@type": "ListItem", position: 2, name: "Practice", item: "https://onlineharmonium.vercel.app/practice" },
+            {
+              "@type": "ListItem",
+              position: 1,
+              name: "Home",
+              item: "https://onlineharmonium.vercel.app/",
+            },
+            {
+              "@type": "ListItem",
+              position: 2,
+              name: "Practice",
+              item: "https://onlineharmonium.vercel.app/practice",
+            },
           ],
         }),
       },
@@ -83,16 +99,14 @@ function PracticePage() {
         <p className="text-lg text-muted-foreground mb-8">
           Interactive practice mode for beginners. Each exercise shows you the next note to play,
           listens to your keyboard input, and gives you instant feedback. Use the same computer keys
-          as the harmonium (Sa is on <kbd className="px-2 py-1 rounded bg-white/10 font-mono">E</kbd>).
+          as the harmonium (Sa is on{" "}
+          <kbd className="px-2 py-1 rounded bg-white/10 font-mono">E</kbd>).
         </p>
 
         <PracticeMode />
 
         <div className="mt-10 grid sm:grid-cols-2 gap-4">
-          <Link
-            to="/play"
-            className="glass rounded-2xl p-5 hover:border-gold/30 transition-colors"
-          >
+          <Link to="/play" className="glass rounded-2xl p-5 hover:border-gold/30 transition-colors">
             <h2 className="font-display text-lg mb-1">Play the Harmonium</h2>
             <p className="text-sm text-muted-foreground">
               Open the full 27-key virtual harmonium and play freely.
@@ -114,11 +128,21 @@ function PracticePage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
           <div>© {new Date().getFullYear()} Online Harmonium - Riyaz</div>
           <div className="flex gap-4 flex-wrap justify-center">
-            <Link to="/" className="hover:text-foreground">Home</Link>
-            <Link to="/play" className="hover:text-foreground">Play</Link>
-            <Link to="/learn" className="hover:text-foreground">Learn</Link>
-            <Link to="/harmonium-notes" className="hover:text-foreground">Notes</Link>
-            <Link to="/harmonium-songs" className="hover:text-foreground">Songs</Link>
+            <Link to="/" className="hover:text-foreground">
+              Home
+            </Link>
+            <Link to="/play" className="hover:text-foreground">
+              Play
+            </Link>
+            <Link to="/learn" className="hover:text-foreground">
+              Learn
+            </Link>
+            <Link to="/harmonium-notes" className="hover:text-foreground">
+              Notes
+            </Link>
+            <Link to="/harmonium-songs" className="hover:text-foreground">
+              Songs
+            </Link>
           </div>
         </div>
       </footer>

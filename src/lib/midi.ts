@@ -41,7 +41,8 @@ function midiToNoteName(midi: number): string {
 async function ensureMidiAccess(): Promise<MIDIAccess | null> {
   if (midiAccess) return midiAccess;
 
-  const ac = (navigator as Navigator & { midi?: { requestAccess: () => Promise<MIDIAccess> } }).midi;
+  const ac = (navigator as Navigator & { midi?: { requestAccess: () => Promise<MIDIAccess> } })
+    .midi;
   if (!ac) return null;
 
   try {

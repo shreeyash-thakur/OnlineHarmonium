@@ -237,7 +237,9 @@ export function PracticeMode() {
       {/* Progress bar */}
       <div className="mb-6">
         <div className="flex items-center justify-between text-xs text-muted-foreground mb-2">
-          <span>Progress: {currentStep}/{exercise.notes.length}</span>
+          <span>
+            Progress: {currentStep}/{exercise.notes.length}
+          </span>
           <span>{progress}%</span>
         </div>
         <div className="h-2 rounded-full bg-white/5 overflow-hidden">
@@ -283,14 +285,13 @@ export function PracticeMode() {
       {/* Current note prompt */}
       {status !== "done" ? (
         <div className="text-center mb-4">
-          <p className="text-sm text-muted-foreground mb-2">
-            Play this note on the harmonium:
-          </p>
+          <p className="text-sm text-muted-foreground mb-2">Play this note on the harmonium:</p>
           <div className="inline-flex items-center gap-3 glass rounded-2xl px-6 py-4">
             <span className="font-display text-3xl font-bold gold-text">{targetSargam}</span>
             {hintKb && (
               <span className="text-xs text-muted-foreground">
-                press <kbd className="px-2 py-1 rounded bg-white/10 font-mono uppercase">{hintKb}</kbd>
+                press{" "}
+                <kbd className="px-2 py-1 rounded bg-white/10 font-mono uppercase">{hintKb}</kbd>
               </span>
             )}
           </div>
@@ -361,8 +362,11 @@ export function PracticeMode() {
       </div>
 
       <p className="mt-4 text-[10px] sm:text-xs text-muted-foreground text-center">
-        Use your computer keyboard or tap the harmonium keys on the <a href="/play" className="text-gold-soft hover:underline">play page</a>.
-        The practice mode listens for the same keys.
+        Use your computer keyboard or tap the harmonium keys on the{" "}
+        <a href="/play" className="text-gold-soft hover:underline">
+          play page
+        </a>
+        . The practice mode listens for the same keys.
       </p>
     </div>
   );
