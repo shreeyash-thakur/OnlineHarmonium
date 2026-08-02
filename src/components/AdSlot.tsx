@@ -1,23 +1,19 @@
 import { useEffect, useRef } from "react";
 
-// Fixed-size ad space for the /play sidebar. Deliberately uses a FIXED
-// pixel size (not AdSense's "auto" responsive format) and is wrapped in a
-// sticky, height-capped, overflow-hidden container — so however tall the
-// filled ad creative ends up, it can never push the page taller or extend
-// the document's scrollbar. It just sits in place on the right.
+// Reusable, fixed-size ad unit. Deliberately uses a FIXED pixel size (not
+// AdSense's "auto" responsive format) and is wrapped in a height-capped,
+// overflow-hidden container — so however tall the filled ad creative ends
+// up, it can never push the page taller or extend the document's
+// scrollbar. It just sits in its box.
 //
 // The AdSense loader script (adsbygoogle.js) is already included site-wide
 // in src/routes/__root.tsx, using this same client ID. To go fully live:
-//   1. Create a "Display ad" unit in the AdSense dashboard (Ads > By ad
-//      unit) sized 300x600 (or 300x250) for this site.
-//   2. Replace AD_SLOT below with the slot ID it gives you.
+//   1. Create a separate "Display ad" unit in the AdSense dashboard for
+//      EACH distinct placement you use (don't reuse one slot ID for
+//      several ad units visible on the same page at once — that's against
+//      AdSense policy). Match each unit's size to the width/height below.
+//   2. Pass that slot ID in via the `slot` prop.
 const AD_CLIENT = "ca-pub-5691989206254780";
-const AD_SLOT = "0000000000";
-
-// Fixed dimensions — matches a standard 300x600 "half page" unit, capped to
-// never exceed the harmonium's own height on desktop.
-const AD_WIDTH = 300;
-const AD_HEIGHT = 600;
 
 declare global {
   interface Window {
@@ -25,7 +21,18 @@ declare global {
   }
 }
 
-function AdUnit() {
+export function AdUnit({
+  slot,
+  width,
+  height,
+  className = "",
+}: {
+  /** AdSense ad unit ID for this specific placement. Must be unique per placement. */
+  slot: string;
+  width: number;
+  height: number;
+  className?: string;
+}) {
   const pushed = useRef(false);
 
   useEffect(() => {
@@ -41,17 +48,17 @@ function AdUnit() {
 
   return (
     <div
-      className="relative mx-auto flex items-center justify-center overflow-hidden"
-      style={{ width: "100%", maxWidth: AD_WIDTH, height: AD_HEIGHT, maxHeight: AD_HEIGHT }}
+      className={`relative mx-auto flex items-center justify-center overflow-hidden ${className}`}
+      style={{ width: "100%", maxWidth: width, height, maxHeight: height }}
     >
       {/* Fixed width/height — no data-full-width-responsive, so AdSense
           fills exactly this box instead of choosing its own (potentially
           taller) size. */}
       <ins
         className="adsbygoogle"
-        style={{ display: "inline-block", width: AD_WIDTH, height: AD_HEIGHT }}
+        style={{ display: "inline-block", width, height }}
         data-ad-client={AD_CLIENT}
-        data-ad-slot={AD_SLOT}
+        data-ad-slot={slot}
       />
       {/* Placeholder label — visible only until a real ad fills the slot */}
       <span className="absolute text-[11px] uppercase tracking-widest text-muted-foreground/60 pointer-events-none">
@@ -61,13 +68,24 @@ function AdUnit() {
   );
 }
 
-export function AdSlot() {
+/** Card-wrapped ad unit for the /play sidebar (matches the page's existing "glass" panel style). */
+export function AdSlot({
+  slot = "0000000000",
+  width = 300,
+  height = 600,
+  sticky = true,
+}: {
+  slot?: string;
+  width?: number;
+  height?: number;
+  sticky?: boolean;
+}) {
   return (
     <div
-      className="glass rounded-2xl p-2 overflow-hidden lg:sticky lg:top-6"
-      style={{ maxHeight: AD_HEIGHT + 16 }}
+      className={`glass rounded-2xl p-2 overflow-hidden ${sticky ? "lg:sticky lg:top-6" : ""}`}
+      style={{ maxHeight: height + 16 }}
     >
-      <AdUnit />
+      <AdUnit slot={slot} width={width} height={height} />
     </div>
   );
 }

@@ -107,7 +107,7 @@ function PlayPage() {
         <div className="grid lg:grid-cols-[1fr_300px] gap-6">
           <Harmonium />
           <aside className="flex flex-col gap-4 lg:self-start">
-            <AdSlot />
+            <AdSlot slot="play-sidebar" />
           </aside>
         </div>
       </main>
