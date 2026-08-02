@@ -43,6 +43,9 @@ export function Harmonium() {
   const [loadError, setLoadError] = useState<string | null>(null);
   const [midiDevices, setMidiDevices] = useState<string[]>([]);
   const [midiConnecting, setMidiConnecting] = useState(false);
+  const [audioStarted, setAudioStarted] = useState(false);
+  const [audioStarting, setAudioStarting] = useState(false);
+  const [keyboardAllowed, setKeyboardAllowed] = useState(false);
 
   // --- Recording state ---
   const [recState, setRecState] = useState<"idle" | "recording" | "ready">("idle");
@@ -69,7 +72,10 @@ export function Harmonium() {
   }, []);
 
   async function startEngineOnce() {
-    if (engineReady.current) return;
+    if (engineReady.current) {
+      setAudioStarted(true);
+      return;
+    }
 
     const engine = getHarmonium();
     try {
@@ -82,25 +88,62 @@ export function Harmonium() {
     engine.setMasterVolume(volume);
     engine.setTranspose(scaleShift + octave * 12);
     engineReady.current = true;
+    setAudioStarted(true);
     setLoadError(null);
   }
 
-  const press = useCallback(async (note: string) => {
-    if (!engineReady.current) {
-      await startEngineOnce();
+  async function startHarmonium() {
+    if (engineReady.current) {
+      setAudioStarted(true);
+      return;
     }
 
-    const engine = getHarmonium();
-    engine.noteOn(note);
-    setBellowsPumping(true);
-    setHeld((prev) => {
-      if (prev.has(note)) return prev;
-      const n = new Set(prev);
-      n.add(note);
-      return n;
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    setAudioStarting(true);
+    try {
+      await startEngineOnce();
+    } finally {
+      setAudioStarting(false);
+    }
+  }
+
+  async function allowKeyboardInput() {
+    if (keyboardAllowed) return;
+    setAudioStarting(true);
+    try {
+      if (!engineReady.current) await startEngineOnce();
+      setKeyboardAllowed(true);
+    } finally {
+      setAudioStarting(false);
+    }
+  }
+
+  const press = useCallback(
+    async (note: string, options: { allowAutoStart?: boolean } = {}) => {
+      if (!engineReady.current) {
+        if (options.allowAutoStart === false) {
+          if (!keyboardAllowed) {
+            setLoadError("Keyboard input requires clicking Allow keyboard input first.");
+            return;
+          }
+          await startEngineOnce();
+        } else {
+          await startEngineOnce();
+        }
+      }
+      if (!engineReady.current) return;
+
+      const engine = getHarmonium();
+      engine.noteOn(note);
+      setBellowsPumping(true);
+      setHeld((prev) => {
+        if (prev.has(note)) return prev;
+        const n = new Set(prev);
+        n.add(note);
+        return n;
+      });
+    },
+    [keyboardAllowed],
+  );
   const release = useCallback((note: string) => {
     getHarmonium().noteOff(note);
     setHeld((prev) => {
@@ -162,7 +205,7 @@ export function Harmonium() {
       const k = kbLookup.get(key);
       if (k) {
         e.preventDefault();
-        press(k.note);
+        press(k.note, { allowAutoStart: false });
       }
     };
     const up = (e: KeyboardEvent) => {
@@ -306,6 +349,55 @@ export function Harmonium() {
           >
             ✕
           </button>
+        </div>
+      )}
+      {!loadError && (!audioStarted || !keyboardAllowed) && (
+        <div className="mb-3 rounded-2xl border border-gold-soft/30 bg-gold-soft/10 p-4 text-sm text-foreground">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className="space-y-2">
+              <p className="font-semibold text-foreground">
+                {audioStarted
+                  ? "Keyboard input is disabled until you allow it."
+                  : "Start the harmonium before playing."}
+              </p>
+              <p className="text-[13px] text-muted-foreground">
+                {audioStarted
+                  ? "Touch or click can still play the harmonium. To use your computer keyboard, click Allow keyboard input."
+                  : "Click Start to unlock browser audio for touch/mouse play. Keyboard input requires explicit permission."}
+              </p>
+              {isMidiSupported() && (
+                <p className="text-[12px] text-muted-foreground">
+                  After starting, use the MIDI button to grant MIDI permission for your controller.
+                </p>
+              )}
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {!audioStarted && (
+                <button
+                  type="button"
+                  onClick={startHarmonium}
+                  disabled={audioStarting}
+                  className={`inline-flex items-center justify-center rounded-full px-4 py-2 text-sm font-semibold transition ${
+                    audioStarting ? "bg-white/10 text-muted-foreground" : "btn-gold btn-gold-hover"
+                  }`}
+                >
+                  {audioStarting ? "Starting…" : "Start harmonium"}
+                </button>
+              )}
+              {!keyboardAllowed && (
+                <button
+                  type="button"
+                  onClick={allowKeyboardInput}
+                  disabled={audioStarting}
+                  className={`inline-flex items-center justify-center rounded-full px-4 py-2 text-sm font-semibold transition ${
+                    audioStarting ? "bg-white/10 text-muted-foreground" : "glass text-foreground hover:text-foreground"
+                  }`}
+                >
+                  Allow keyboard input
+                </button>
+              )}
+            </div>
+          </div>
         </div>
       )}
       {/* Top brass strip */}
